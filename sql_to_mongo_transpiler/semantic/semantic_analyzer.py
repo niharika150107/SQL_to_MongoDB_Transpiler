@@ -25,6 +25,12 @@ class SemanticAnalyzer:
         # 3. Validate WHERE Clause
         if node.where:
             self.validate_condition(node.where, table_name)
+        # HAVING requires GROUP BY
+        if node.having and not node.group_by:
+            raise SemanticError("HAVING clause requires GROUP BY")
+        # Validate HAVING condition
+        if node.having:
+            self.validate_condition(node.having, table_name)
         # 4. Validate GROUP BY
         if node.group_by:
             table_schema = self.schema[table_name]
@@ -79,7 +85,12 @@ class SemanticAnalyzer:
     def validate_comparison(self, node: Comparison, table_name):
         col_name = node.identifier
         table_schema = self.schema[table_name]
-
+        #if identifier is aggregate
+        if isinstance(col_name, Aggregate):
+            # Just validate literal type
+            if not isinstance(node.value, (int, str)):
+                raise SemanticError("Invalid HAVING condition value")
+            return
         # Check column existence
         if col_name not in table_schema:
             raise SemanticError(f"Column '{col_name}' does not exist in table '{table_name}'")

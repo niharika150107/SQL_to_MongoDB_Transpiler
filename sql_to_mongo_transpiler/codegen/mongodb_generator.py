@@ -58,6 +58,11 @@ class MongoDBGenerator:
                             }[func]
                     group_stage[f"{func.lower()}_{column}"] = {mongo_operator: f"${column}"}
         pipeline.append({ "$group": group_stage })
+        # HAVING → $match AFTER $group
+        if node.having:
+            pipeline.append({
+                "$match": self._generate_filter(node.having)
+                })
         # ORDER BY after GROUP
         if node.order_by:
             sort_doc = {}
@@ -165,7 +170,19 @@ class MongoDBGenerator:
         field = node.identifier
         value = node.value
         operator = node.operator
-        
+        identifier=node.identifier
+        if isinstance(identifier, Aggregate):
+            func = identifier.func
+            column = identifier.column
+            if func == "COUNT":
+                if column == "*":
+                    field = "count"
+                else:
+                    field = f"count_{column}"
+            else:
+                field = f"{func.lower()}_{column}"
+        else:
+            field = identifier
         # Direct equality check
         if operator == '=':
             return {field: value}

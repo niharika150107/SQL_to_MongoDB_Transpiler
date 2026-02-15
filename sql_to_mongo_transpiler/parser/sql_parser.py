@@ -16,8 +16,8 @@ class SqlParser:
     )
 
     def p_query(self, p):
-        '''query : SELECT select_list FROM IDENTIFIER where_clause_opt group_by_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON'''
-        p[0] = SelectQuery(columns=p[2], table=p[4], where=p[5],group_by=p[6],order_by=p[7],limit=p[8])
+        '''query : SELECT select_list FROM IDENTIFIER where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON'''
+        p[0] = SelectQuery(columns=p[2], table=p[4], where=p[5],group_by=p[6],having=p[7],order_by=p[8],limit=p[9])
 
     def p_select_list_star(self, p):
         '''select_list : STAR'''
@@ -74,6 +74,14 @@ class SqlParser:
         '''group_list : group_list COMMA IDENTIFIER'''
         p[0] = p[1] + [p[3]]
 
+    def p_having_clause_opt(self, p):
+        '''having_clause_opt : HAVING condition
+                             | empty'''
+        if len(p) == 3:
+            p[0] = p[2]
+        else:
+            p[0] = None
+
     def p_condition_visual(self, p):
         '''condition : condition AND condition
                      | condition OR condition'''
@@ -83,9 +91,25 @@ class SqlParser:
         '''condition : comparison'''
         p[0] = p[1]
 
+    def p_aggregate_expr(self, p):
+        '''aggregate_expr : COUNT LPAREN STAR RPAREN
+                          | COUNT LPAREN IDENTIFIER RPAREN
+                          | MIN LPAREN IDENTIFIER RPAREN
+                          | MAX LPAREN IDENTIFIER RPAREN
+                          | AVG LPAREN IDENTIFIER RPAREN
+                          | SUM LPAREN IDENTIFIER RPAREN'''
+        if p[1].upper() == "COUNT" and p[3] == "*":
+            p[0] = Aggregate("COUNT", "*")
+        else:
+            p[0] = Aggregate(p[1].upper(), p[3])
+
     def p_comparison(self, p):
-        '''comparison : IDENTIFIER operator literal'''
-        p[0] = Comparison(identifier=p[1], operator=p[2], value=p[3])
+        '''comparison : IDENTIFIER operator literal
+                      | aggregate_expr operator literal'''
+        if isinstance(p[1],Aggregate):
+            p[0] = Comparison(identifier=p[1], operator=p[2], value=p[3])
+        else:
+            p[0] = Comparison(identifier=p[1], operator=p[2], value=p[3])
 
     def p_comparison_between(self, p):
         '''comparison : IDENTIFIER BETWEEN literal AND literal'''

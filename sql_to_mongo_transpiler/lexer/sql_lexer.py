@@ -41,7 +41,8 @@ class SqlLexer:
         'MAX',
         'AVG',
         'SUM',
-        'GROUP'
+        'GROUP',
+        'HAVING'
     )
 
     # Regular expression rules for simple tokens
@@ -78,7 +79,8 @@ class SqlLexer:
         'MAX':'MAX',
         'AVG':'AVG',
         'SUM':'SUM',
-        'GROUP':'GROUP'
+        'GROUP':'GROUP',
+        'HAVING':'HAVING'
     }
 
     def t_IDENTIFIER(self, t):

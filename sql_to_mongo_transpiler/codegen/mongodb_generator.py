@@ -9,10 +9,11 @@ class MongoDBGenerator:
         return False
 
     def generate(self, ast):
-        if self._has_aggregate(ast):
-            return self._generate_aggregate(ast)
-        elif isinstance(ast, SelectQuery):
-            return self._generate_find(ast)
+        if isinstance(ast,SelectQuery):
+            if self._has_aggregate(ast) or ast.group_by:
+                return self._generate_aggregate(ast)
+            elif isinstance(ast, SelectQuery):
+                return self._generate_find(ast)
         else:
             raise ValueError(f"Unsupported AST node: {type(ast)}")
     def _generate_aggregate(self, node):
@@ -21,22 +22,62 @@ class MongoDBGenerator:
         if node.where:
             match_stage = {"$match": self._generate_filter(node.where)}
             pipeline.append(match_stage)
-        group_stage = { "_id": None }
+        group_stage = {}
+        if node.group_by:
+            if len(node.group_by) == 1:
+                group_stage["_id"] = f"${node.group_by[0]}"
+            else:
+                group_stage["_id"] = {
+                        col: f"${col}" for col in node.group_by
+                        }
+        else:
+            group_stage["_id"] = None
         for col in node.columns:
             if isinstance(col, Aggregate):
                 func = col.func
                 column = col.column
-                if func == "COUNT" and column == "*":
-                    group_stage["count"] = { "$sum": 1 }
-                else:
+                if func == "COUNT":
+                    if column == "*":
+                        group_stage["count"] = { "$sum": 1 }
+                    else:
+                        group_stage[f"count_{column}"] = {
+                                "$sum": {
+                                    "$cond": [
+                                        {"$ne": [f"${column}", None]},
+                                        1,
+                                        0
+                                    ]
+                            }
+                    }
+                elif func in ["MIN","MAX","AVG","SUM"]:
                     mongo_operator = {
                             "MIN": "$min",
                             "MAX": "$max",
                             "AVG": "$avg",
                             "SUM": "$sum"
-                            }.get(func)
+                            }[func]
                     group_stage[f"{func.lower()}_{column}"] = {mongo_operator: f"${column}"}
         pipeline.append({ "$group": group_stage })
+        # ORDER BY after GROUP
+        if node.order_by:
+            sort_doc = {}
+            for item in node.order_by:
+                direction = 1 if item.direction.upper() == "ASC" else -1
+                # If sorting by grouped column → map to _id
+                if node.group_by and item.column in node.group_by:
+                    if len(node.group_by) == 1:
+                        sort_doc["_id"] = direction
+                    else:
+                        sort_doc[f"_id.{item.column}"] = direction
+                else:
+                    # Sorting by aggregate field
+                    sort_doc[item.column] = direction
+            pipeline.append({"$sort": sort_doc})
+
+        # LIMIT after GROUP
+        if node.limit is not None:
+            pipeline.append({"$limit": node.limit})
+
         return f"db.{node.table}.aggregate({pipeline})"
 
     def _generate_find(self, node: SelectQuery):

@@ -62,10 +62,11 @@ class Aggregate(ASTNode):
 
 class SelectQuery(ASTNode):
     """Represents a SELECT query"""
-    def __init__(self, columns: List[Union[str,Aggregate]], table: str, where: Optional[ASTNode] = None,order_by:Optional[List[OrderByItem]] = None,limit:Optional[int] = None,offset:Optional[int] = None):
+    def __init__(self, columns: List[Union[str,Aggregate]], table: str, where: Optional[ASTNode] = None,group_by:Optional[List[str]] = None,order_by:Optional[List[OrderByItem]] = None,limit:Optional[int] = None,offset:Optional[int] = None):
         self.columns = columns
         self.table = table
         self.where = where
+        self.group_by = group_by or []
         self.order_by = order_by or []
         self.limit = limit
         self.offset = offset
@@ -75,6 +76,13 @@ class SelectQuery(ASTNode):
             where_repr = repr(self.where).replace('\n', '\n    ')
         else:
             where_repr = 'None'
+        if self.group_by:
+            group_repr = "[\n        " + ",\n        ".join(
+                    repr(g) for g in self.group_by
+                    ) + "\n    ]"
+        else:
+            group_repr = "[]"
+
         if self.order_by:
             order_repr = "[\n        " + ",\n        ".join(
                 repr(o).replace('\n', '\n        ') for o in self.order_by
@@ -86,6 +94,7 @@ class SelectQuery(ASTNode):
                 f"    columns={self.columns},\n"
                 f"    table='{self.table}',\n"
                 f"    where={where_repr},\n"
+                f"    group_by={group_repr},\n"
                 f"    order_by={order_repr},\n"
                 f"    limit={self.limit},\n"
                 f"    offset={self.offset}\n"

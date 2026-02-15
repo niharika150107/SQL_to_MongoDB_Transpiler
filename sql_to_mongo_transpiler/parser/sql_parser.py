@@ -16,8 +16,8 @@ class SqlParser:
     )
 
     def p_query(self, p):
-        '''query : SELECT select_list FROM IDENTIFIER where_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON'''
-        p[0] = SelectQuery(columns=p[2], table=p[4], where=p[5],order_by=p[6],limit=p[7])
+        '''query : SELECT select_list FROM IDENTIFIER where_clause_opt group_by_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON'''
+        p[0] = SelectQuery(columns=p[2], table=p[4], where=p[5],group_by=p[6],order_by=p[7],limit=p[8])
 
     def p_select_list_star(self, p):
         '''select_list : STAR'''
@@ -58,6 +58,21 @@ class SqlParser:
             p[0] = p[2]
         else:
             p[0] = None
+
+    def p_group_by_clause_opt(self, p):
+        '''group_by_clause_opt : GROUP BY group_list
+                               | empty'''
+        if len(p) == 4:
+            p[0] = p[3]
+        else:
+            p[0] = []
+    def p_group_list_single(self, p):
+        '''group_list : IDENTIFIER'''
+        p[0] = [p[1]]
+
+    def p_group_list_multiple(self, p):
+        '''group_list : group_list COMMA IDENTIFIER'''
+        p[0] = p[1] + [p[3]]
 
     def p_condition_visual(self, p):
         '''condition : condition AND condition

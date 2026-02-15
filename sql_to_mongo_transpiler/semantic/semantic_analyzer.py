@@ -25,6 +25,19 @@ class SemanticAnalyzer:
         # 3. Validate WHERE Clause
         if node.where:
             self.validate_condition(node.where, table_name)
+        # 4. Validate GROUP BY
+        if node.group_by:
+            table_schema = self.schema[table_name]
+            # validate group_by columns exist
+            for col in node.group_by:
+                if col not in table_schema:
+                    raise SemanticError(f"Column '{col}' does not exist in table '{table_name}'")
+            # validate SELECT columns follow SQL rules
+            for col in node.columns:
+                if isinstance(col, str):
+                    if col not in node.group_by:
+                        raise SemanticError(
+                                f"Column '{col}' must appear in GROUP BY or be aggregated")
 
     def validate_columns(self, columns, table_name):
         table_schema = self.schema[table_name]

@@ -62,9 +62,10 @@ class Aggregate(ASTNode):
 
 class SelectQuery(ASTNode):
     """Represents a SELECT query"""
-    def __init__(self, columns: List[Union[str,Aggregate]], table: str, where: Optional[ASTNode] = None,group_by:Optional[List[str]] = None,having:Optional[ASTNode] = None,order_by:Optional[List[OrderByItem]] = None,limit:Optional[int] = None,offset:Optional[int] = None):
+    def __init__(self, columns: List[Union[str,Aggregate]], table: str,joins=None, where: Optional[ASTNode] = None,group_by:Optional[List[str]] = None,having:Optional[ASTNode] = None,order_by:Optional[List[OrderByItem]] = None,limit:Optional[int] = None,offset:Optional[int] = None):
         self.columns = columns
         self.table = table
+        self.joins = joins or []
         self.where = where
         self.group_by = group_by or []
         self.having=having

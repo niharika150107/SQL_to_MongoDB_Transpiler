@@ -43,7 +43,9 @@ class SqlLexer:
         'SUM',
         'GROUP',
         'HAVING',
-        'DOT'
+        'DOT',
+        'JOIN',
+        'ON',
     )
 
     # Regular expression rules for simple tokens
@@ -82,7 +84,9 @@ class SqlLexer:
         'AVG':'AVG',
         'SUM':'SUM',
         'GROUP':'GROUP',
-        'HAVING':'HAVING'
+        'HAVING':'HAVING',
+        'JOIN':'JOIN',
+        'ON':'ON',
     }
 
     def t_IDENTIFIER(self, t):

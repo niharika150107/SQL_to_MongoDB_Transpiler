@@ -15,7 +15,15 @@ class SemanticAnalyzer:
 
     def validate_select(self, node: SelectQuery):
         # 1. Validate Table Exists
-        tables = node.table if isinstance(node.table, list) else [node.table]
+        #tables = node.table if isinstance(node.table, list) else [node.table]
+        if isinstance(node.table, list):
+            tables = node.table.copy()
+        else:
+            tables = [node.table]
+        # add explicit join tables
+        if hasattr(node, "joins") and node.joins:
+            for join in node.joins:
+                tables.append(join["table"])
         print("tables:",tables)
         if len(tables) > 2:
             raise SemanticError("Only 2-table JOIN supported currently")
@@ -31,7 +39,15 @@ class SemanticAnalyzer:
         self.validate_columns(node.columns, table_name,node)
 
         # 3. Validate WHERE Clause
-        tables = node.table if isinstance(node.table, list) else [node.table]
+        #tables = node.table if isinstance(node.table, list) else [node.table]
+        if isinstance(node.table, list):
+            tables = node.table.copy()
+        else:
+            tables = [node.table]
+
+        if hasattr(node, "joins") and node.joins:
+            for join in node.joins:
+                tables.append(join["table"])
         if isinstance(node.table, list) and len(node.table) == 2:
             if not node.where:
                 raise SemanticError("JOIN condition required for multiple tables")
@@ -86,7 +102,15 @@ class SemanticAnalyzer:
                 # FIX: resolve missing table
                 if table is None or "." not in col:
                     matches = []
-                    tables = node.table if isinstance(node.table, list) else [node.table]
+                    #tables = node.table if isinstance(node.table, list) else [node.table]
+                    # include joins here also
+                    if isinstance(node.table, list):
+                        tables = node.table.copy()
+                    else:
+                        tables = [node.table]
+                    if hasattr(node, "joins") and node.joins:
+                        for join in node.joins:
+                            tables.append(join["table"])
                     for t in tables:
                         if column_name in self.schema[t]:
                             matches.append(t)
@@ -102,7 +126,15 @@ class SemanticAnalyzer:
                     column_name = col
                     # search across all tables
                     matches = []
-                    tables = node.table if isinstance(node.table, list) else [node.table]
+                    #tables = node.table if isinstance(node.table, list) else [node.table]
+                    # include joins here also
+                    if isinstance(node.table, list):
+                        tables = node.table.copy()
+                    else:
+                        tables = [node.table]
+                    if hasattr(node, "joins") and node.joins:
+                        for join in node.joins:
+                            tables.append(join["table"])
                     for t in tables:
                         if column_name in self.schema[t]:
                             matches.append(t)

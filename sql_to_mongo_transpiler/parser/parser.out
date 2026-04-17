@@ -7,123 +7,126 @@ Rule 1     query -> SELECT select_list FROM table_list where_clause_opt group_by
 Rule 2     select_list -> STAR
 Rule 3     table_list -> IDENTIFIER
 Rule 4     table_list -> table_list COMMA IDENTIFIER
-Rule 5     select_list -> column_list
-Rule 6     column_list -> column
-Rule 7     column_list -> column_list COMMA column
-Rule 8     column -> identifier
-Rule 9     column -> COUNT LPAREN STAR RPAREN
-Rule 10    column -> COUNT LPAREN IDENTIFIER RPAREN
-Rule 11    column -> MIN LPAREN IDENTIFIER RPAREN
-Rule 12    column -> MAX LPAREN IDENTIFIER RPAREN
-Rule 13    column -> AVG LPAREN IDENTIFIER RPAREN
-Rule 14    column -> SUM LPAREN IDENTIFIER RPAREN
-Rule 15    where_clause_opt -> WHERE condition
-Rule 16    where_clause_opt -> empty
-Rule 17    group_by_clause_opt -> GROUP BY group_list
-Rule 18    group_by_clause_opt -> empty
-Rule 19    group_list -> IDENTIFIER
-Rule 20    group_list -> group_list COMMA IDENTIFIER
-Rule 21    having_clause_opt -> HAVING condition
-Rule 22    having_clause_opt -> empty
-Rule 23    condition -> condition AND term
-Rule 24    condition -> condition OR term
-Rule 25    condition -> term
-Rule 26    term -> comparison
-Rule 27    aggregate_expr -> COUNT LPAREN STAR RPAREN
-Rule 28    aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN
-Rule 29    aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN
-Rule 30    aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN
-Rule 31    aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN
-Rule 32    aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN
-Rule 33    comparison -> identifier operator identifier
-Rule 34    comparison -> identifier operator literal
-Rule 35    comparison -> aggregate_expr operator literal
-Rule 36    comparison -> IDENTIFIER BETWEEN literal AND literal
-Rule 37    literal_list -> literal
-Rule 38    literal_list -> literal_list COMMA literal
-Rule 39    comparison -> IDENTIFIER IN LPAREN literal_list RPAREN
-Rule 40    operator -> EQ
-Rule 41    operator -> NE
-Rule 42    operator -> GT
-Rule 43    operator -> LT
-Rule 44    operator -> GE
-Rule 45    operator -> LE
-Rule 46    literal -> NUMBER
-Rule 47    literal -> STRING
-Rule 48    order_by_clause_opt -> ORDER BY order_list
-Rule 49    order_by_clause_opt -> empty
-Rule 50    order_list -> order_item
-Rule 51    order_list -> order_list COMMA order_item
-Rule 52    order_item -> IDENTIFIER
-Rule 53    order_item -> IDENTIFIER ASC
-Rule 54    order_item -> IDENTIFIER DESC
-Rule 55    limit_clause_opt -> LIMIT NUMBER
-Rule 56    limit_clause_opt -> empty
-Rule 57    empty -> <empty>
-Rule 58    identifier -> IDENTIFIER
-Rule 59    identifier -> IDENTIFIER DOT IDENTIFIER
+Rule 5     table_list -> IDENTIFIER JOIN IDENTIFIER ON condition
+Rule 6     select_list -> column_list
+Rule 7     column_list -> column
+Rule 8     column_list -> column_list COMMA column
+Rule 9     column -> identifier
+Rule 10    column -> COUNT LPAREN STAR RPAREN
+Rule 11    column -> COUNT LPAREN IDENTIFIER RPAREN
+Rule 12    column -> MIN LPAREN IDENTIFIER RPAREN
+Rule 13    column -> MAX LPAREN IDENTIFIER RPAREN
+Rule 14    column -> AVG LPAREN IDENTIFIER RPAREN
+Rule 15    column -> SUM LPAREN IDENTIFIER RPAREN
+Rule 16    where_clause_opt -> WHERE condition
+Rule 17    where_clause_opt -> empty
+Rule 18    group_by_clause_opt -> GROUP BY group_list
+Rule 19    group_by_clause_opt -> empty
+Rule 20    group_list -> IDENTIFIER
+Rule 21    group_list -> group_list COMMA IDENTIFIER
+Rule 22    having_clause_opt -> HAVING condition
+Rule 23    having_clause_opt -> empty
+Rule 24    condition -> condition AND term
+Rule 25    condition -> condition OR term
+Rule 26    condition -> term
+Rule 27    term -> comparison
+Rule 28    aggregate_expr -> COUNT LPAREN STAR RPAREN
+Rule 29    aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN
+Rule 30    aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN
+Rule 31    aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN
+Rule 32    aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN
+Rule 33    aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN
+Rule 34    comparison -> identifier operator identifier
+Rule 35    comparison -> identifier operator literal
+Rule 36    comparison -> aggregate_expr operator literal
+Rule 37    comparison -> IDENTIFIER BETWEEN literal AND literal
+Rule 38    literal_list -> literal
+Rule 39    literal_list -> literal_list COMMA literal
+Rule 40    comparison -> IDENTIFIER IN LPAREN literal_list RPAREN
+Rule 41    operator -> EQ
+Rule 42    operator -> NE
+Rule 43    operator -> GT
+Rule 44    operator -> LT
+Rule 45    operator -> GE
+Rule 46    operator -> LE
+Rule 47    literal -> NUMBER
+Rule 48    literal -> STRING
+Rule 49    order_by_clause_opt -> ORDER BY order_list
+Rule 50    order_by_clause_opt -> empty
+Rule 51    order_list -> order_item
+Rule 52    order_list -> order_list COMMA order_item
+Rule 53    order_item -> IDENTIFIER
+Rule 54    order_item -> IDENTIFIER ASC
+Rule 55    order_item -> IDENTIFIER DESC
+Rule 56    limit_clause_opt -> LIMIT NUMBER
+Rule 57    limit_clause_opt -> empty
+Rule 58    empty -> <empty>
+Rule 59    identifier -> IDENTIFIER
+Rule 60    identifier -> IDENTIFIER DOT IDENTIFIER
 
 Terminals, with rules where they appear
 
-AND                  : 23 36
-ASC                  : 53
-AVG                  : 13 31
-BETWEEN              : 36
-BY                   : 17 48
-COMMA                : 4 7 20 38 51
-COUNT                : 9 10 27 28
-DESC                 : 54
-DOT                  : 59
-EQ                   : 40
+AND                  : 24 37
+ASC                  : 54
+AVG                  : 14 32
+BETWEEN              : 37
+BY                   : 18 49
+COMMA                : 4 8 21 39 52
+COUNT                : 10 11 28 29
+DESC                 : 55
+DOT                  : 60
+EQ                   : 41
 FROM                 : 1
-GE                   : 44
-GROUP                : 17
-GT                   : 42
-HAVING               : 21
-IDENTIFIER           : 3 4 10 11 12 13 14 19 20 28 29 30 31 32 36 39 52 53 54 58 59 59
-IN                   : 39
-LE                   : 45
-LIMIT                : 55
-LPAREN               : 9 10 11 12 13 14 27 28 29 30 31 32 39
-LT                   : 43
-MAX                  : 12 30
-MIN                  : 11 29
-NE                   : 41
-NUMBER               : 46 55
-OR                   : 24
-ORDER                : 48
-RPAREN               : 9 10 11 12 13 14 27 28 29 30 31 32 39
+GE                   : 45
+GROUP                : 18
+GT                   : 43
+HAVING               : 22
+IDENTIFIER           : 3 4 5 5 11 12 13 14 15 20 21 29 30 31 32 33 37 40 53 54 55 59 60 60
+IN                   : 40
+JOIN                 : 5
+LE                   : 46
+LIMIT                : 56
+LPAREN               : 10 11 12 13 14 15 28 29 30 31 32 33 40
+LT                   : 44
+MAX                  : 13 31
+MIN                  : 12 30
+NE                   : 42
+NUMBER               : 47 56
+ON                   : 5
+OR                   : 25
+ORDER                : 49
+RPAREN               : 10 11 12 13 14 15 28 29 30 31 32 33 40
 SELECT               : 1
 SEMICOLON            : 1
-STAR                 : 2 9 27
-STRING               : 47
-SUM                  : 14 32
-WHERE                : 15
+STAR                 : 2 10 28
+STRING               : 48
+SUM                  : 15 33
+WHERE                : 16
 error                : 
 
 Nonterminals, with rules where they appear
 
-aggregate_expr       : 35
-column               : 6 7
-column_list          : 5 7
-comparison           : 26
-condition            : 15 21 23 24
-empty                : 16 18 22 49 56
+aggregate_expr       : 36
+column               : 7 8
+column_list          : 6 8
+comparison           : 27
+condition            : 5 16 22 24 25
+empty                : 17 19 23 50 57
 group_by_clause_opt  : 1
-group_list           : 17 20
+group_list           : 18 21
 having_clause_opt    : 1
-identifier           : 8 33 33 34
+identifier           : 9 34 34 35
 limit_clause_opt     : 1
-literal              : 34 35 36 36 37 38
-literal_list         : 38 39
-operator             : 33 34 35
+literal              : 35 36 37 37 38 39
+literal_list         : 39 40
+operator             : 34 35 36
 order_by_clause_opt  : 1
-order_item           : 50 51
-order_list           : 48 51
+order_item           : 51 52
+order_list           : 49 52
 query                : 0
 select_list          : 1
 table_list           : 1 4
-term                 : 23 24 25
+term                 : 24 25 26
 where_clause_opt     : 1
 
 Parsing method: LALR
@@ -147,18 +150,18 @@ state 2
 
     (1) query -> SELECT . select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
     (2) select_list -> . STAR
-    (5) select_list -> . column_list
-    (6) column_list -> . column
-    (7) column_list -> . column_list COMMA column
-    (8) column -> . identifier
-    (9) column -> . COUNT LPAREN STAR RPAREN
-    (10) column -> . COUNT LPAREN IDENTIFIER RPAREN
-    (11) column -> . MIN LPAREN IDENTIFIER RPAREN
-    (12) column -> . MAX LPAREN IDENTIFIER RPAREN
-    (13) column -> . AVG LPAREN IDENTIFIER RPAREN
-    (14) column -> . SUM LPAREN IDENTIFIER RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (6) select_list -> . column_list
+    (7) column_list -> . column
+    (8) column_list -> . column_list COMMA column
+    (9) column -> . identifier
+    (10) column -> . COUNT LPAREN STAR RPAREN
+    (11) column -> . COUNT LPAREN IDENTIFIER RPAREN
+    (12) column -> . MIN LPAREN IDENTIFIER RPAREN
+    (13) column -> . MAX LPAREN IDENTIFIER RPAREN
+    (14) column -> . AVG LPAREN IDENTIFIER RPAREN
+    (15) column -> . SUM LPAREN IDENTIFIER RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
 
     STAR            shift and go to state 4
     COUNT           shift and go to state 8
@@ -189,78 +192,79 @@ state 4
 
 state 5
 
-    (5) select_list -> column_list .
-    (7) column_list -> column_list . COMMA column
+    (6) select_list -> column_list .
+    (8) column_list -> column_list . COMMA column
 
-    FROM            reduce using rule 5 (select_list -> column_list .)
+    FROM            reduce using rule 6 (select_list -> column_list .)
     COMMA           shift and go to state 15
 
 
 state 6
 
-    (6) column_list -> column .
+    (7) column_list -> column .
 
-    COMMA           reduce using rule 6 (column_list -> column .)
-    FROM            reduce using rule 6 (column_list -> column .)
+    COMMA           reduce using rule 7 (column_list -> column .)
+    FROM            reduce using rule 7 (column_list -> column .)
 
 
 state 7
 
-    (8) column -> identifier .
+    (9) column -> identifier .
 
-    COMMA           reduce using rule 8 (column -> identifier .)
-    FROM            reduce using rule 8 (column -> identifier .)
+    COMMA           reduce using rule 9 (column -> identifier .)
+    FROM            reduce using rule 9 (column -> identifier .)
 
 
 state 8
 
-    (9) column -> COUNT . LPAREN STAR RPAREN
-    (10) column -> COUNT . LPAREN IDENTIFIER RPAREN
+    (10) column -> COUNT . LPAREN STAR RPAREN
+    (11) column -> COUNT . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 16
 
 
 state 9
 
-    (58) identifier -> IDENTIFIER .
-    (59) identifier -> IDENTIFIER . DOT IDENTIFIER
+    (59) identifier -> IDENTIFIER .
+    (60) identifier -> IDENTIFIER . DOT IDENTIFIER
 
-    COMMA           reduce using rule 58 (identifier -> IDENTIFIER .)
-    FROM            reduce using rule 58 (identifier -> IDENTIFIER .)
-    AND             reduce using rule 58 (identifier -> IDENTIFIER .)
-    OR              reduce using rule 58 (identifier -> IDENTIFIER .)
-    GROUP           reduce using rule 58 (identifier -> IDENTIFIER .)
-    HAVING          reduce using rule 58 (identifier -> IDENTIFIER .)
-    ORDER           reduce using rule 58 (identifier -> IDENTIFIER .)
-    LIMIT           reduce using rule 58 (identifier -> IDENTIFIER .)
-    SEMICOLON       reduce using rule 58 (identifier -> IDENTIFIER .)
+    COMMA           reduce using rule 59 (identifier -> IDENTIFIER .)
+    FROM            reduce using rule 59 (identifier -> IDENTIFIER .)
+    AND             reduce using rule 59 (identifier -> IDENTIFIER .)
+    OR              reduce using rule 59 (identifier -> IDENTIFIER .)
+    GROUP           reduce using rule 59 (identifier -> IDENTIFIER .)
+    HAVING          reduce using rule 59 (identifier -> IDENTIFIER .)
+    ORDER           reduce using rule 59 (identifier -> IDENTIFIER .)
+    LIMIT           reduce using rule 59 (identifier -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 59 (identifier -> IDENTIFIER .)
+    WHERE           reduce using rule 59 (identifier -> IDENTIFIER .)
     DOT             shift and go to state 17
 
 
 state 10
 
-    (11) column -> MIN . LPAREN IDENTIFIER RPAREN
+    (12) column -> MIN . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 18
 
 
 state 11
 
-    (12) column -> MAX . LPAREN IDENTIFIER RPAREN
+    (13) column -> MAX . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 19
 
 
 state 12
 
-    (13) column -> AVG . LPAREN IDENTIFIER RPAREN
+    (14) column -> AVG . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 20
 
 
 state 13
 
-    (14) column -> SUM . LPAREN IDENTIFIER RPAREN
+    (15) column -> SUM . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 21
 
@@ -270,6 +274,7 @@ state 14
     (1) query -> SELECT select_list FROM . table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
     (3) table_list -> . IDENTIFIER
     (4) table_list -> . table_list COMMA IDENTIFIER
+    (5) table_list -> . IDENTIFIER JOIN IDENTIFIER ON condition
 
     IDENTIFIER      shift and go to state 23
 
@@ -277,16 +282,16 @@ state 14
 
 state 15
 
-    (7) column_list -> column_list COMMA . column
-    (8) column -> . identifier
-    (9) column -> . COUNT LPAREN STAR RPAREN
-    (10) column -> . COUNT LPAREN IDENTIFIER RPAREN
-    (11) column -> . MIN LPAREN IDENTIFIER RPAREN
-    (12) column -> . MAX LPAREN IDENTIFIER RPAREN
-    (13) column -> . AVG LPAREN IDENTIFIER RPAREN
-    (14) column -> . SUM LPAREN IDENTIFIER RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (8) column_list -> column_list COMMA . column
+    (9) column -> . identifier
+    (10) column -> . COUNT LPAREN STAR RPAREN
+    (11) column -> . COUNT LPAREN IDENTIFIER RPAREN
+    (12) column -> . MIN LPAREN IDENTIFIER RPAREN
+    (13) column -> . MAX LPAREN IDENTIFIER RPAREN
+    (14) column -> . AVG LPAREN IDENTIFIER RPAREN
+    (15) column -> . SUM LPAREN IDENTIFIER RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
 
     COUNT           shift and go to state 8
     MIN             shift and go to state 10
@@ -300,8 +305,8 @@ state 15
 
 state 16
 
-    (9) column -> COUNT LPAREN . STAR RPAREN
-    (10) column -> COUNT LPAREN . IDENTIFIER RPAREN
+    (10) column -> COUNT LPAREN . STAR RPAREN
+    (11) column -> COUNT LPAREN . IDENTIFIER RPAREN
 
     STAR            shift and go to state 25
     IDENTIFIER      shift and go to state 26
@@ -309,35 +314,35 @@ state 16
 
 state 17
 
-    (59) identifier -> IDENTIFIER DOT . IDENTIFIER
+    (60) identifier -> IDENTIFIER DOT . IDENTIFIER
 
     IDENTIFIER      shift and go to state 27
 
 
 state 18
 
-    (11) column -> MIN LPAREN . IDENTIFIER RPAREN
+    (12) column -> MIN LPAREN . IDENTIFIER RPAREN
 
     IDENTIFIER      shift and go to state 28
 
 
 state 19
 
-    (12) column -> MAX LPAREN . IDENTIFIER RPAREN
+    (13) column -> MAX LPAREN . IDENTIFIER RPAREN
 
     IDENTIFIER      shift and go to state 29
 
 
 state 20
 
-    (13) column -> AVG LPAREN . IDENTIFIER RPAREN
+    (14) column -> AVG LPAREN . IDENTIFIER RPAREN
 
     IDENTIFIER      shift and go to state 30
 
 
 state 21
 
-    (14) column -> SUM LPAREN . IDENTIFIER RPAREN
+    (15) column -> SUM LPAREN . IDENTIFIER RPAREN
 
     IDENTIFIER      shift and go to state 31
 
@@ -346,17 +351,17 @@ state 22
 
     (1) query -> SELECT select_list FROM table_list . where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
     (4) table_list -> table_list . COMMA IDENTIFIER
-    (15) where_clause_opt -> . WHERE condition
-    (16) where_clause_opt -> . empty
-    (57) empty -> .
+    (16) where_clause_opt -> . WHERE condition
+    (17) where_clause_opt -> . empty
+    (58) empty -> .
 
     COMMA           shift and go to state 33
     WHERE           shift and go to state 34
-    GROUP           reduce using rule 57 (empty -> .)
-    HAVING          reduce using rule 57 (empty -> .)
-    ORDER           reduce using rule 57 (empty -> .)
-    LIMIT           reduce using rule 57 (empty -> .)
-    SEMICOLON       reduce using rule 57 (empty -> .)
+    GROUP           reduce using rule 58 (empty -> .)
+    HAVING          reduce using rule 58 (empty -> .)
+    ORDER           reduce using rule 58 (empty -> .)
+    LIMIT           reduce using rule 58 (empty -> .)
+    SEMICOLON       reduce using rule 58 (empty -> .)
 
     where_clause_opt               shift and go to state 32
     empty                          shift and go to state 35
@@ -364,6 +369,7 @@ state 22
 state 23
 
     (3) table_list -> IDENTIFIER .
+    (5) table_list -> IDENTIFIER . JOIN IDENTIFIER ON condition
 
     COMMA           reduce using rule 3 (table_list -> IDENTIFIER .)
     WHERE           reduce using rule 3 (table_list -> IDENTIFIER .)
@@ -372,228 +378,237 @@ state 23
     ORDER           reduce using rule 3 (table_list -> IDENTIFIER .)
     LIMIT           reduce using rule 3 (table_list -> IDENTIFIER .)
     SEMICOLON       reduce using rule 3 (table_list -> IDENTIFIER .)
+    JOIN            shift and go to state 36
 
 
 state 24
 
-    (7) column_list -> column_list COMMA column .
+    (8) column_list -> column_list COMMA column .
 
-    COMMA           reduce using rule 7 (column_list -> column_list COMMA column .)
-    FROM            reduce using rule 7 (column_list -> column_list COMMA column .)
+    COMMA           reduce using rule 8 (column_list -> column_list COMMA column .)
+    FROM            reduce using rule 8 (column_list -> column_list COMMA column .)
 
 
 state 25
 
-    (9) column -> COUNT LPAREN STAR . RPAREN
-
-    RPAREN          shift and go to state 36
-
-
-state 26
-
-    (10) column -> COUNT LPAREN IDENTIFIER . RPAREN
+    (10) column -> COUNT LPAREN STAR . RPAREN
 
     RPAREN          shift and go to state 37
 
 
-state 27
+state 26
 
-    (59) identifier -> IDENTIFIER DOT IDENTIFIER .
-
-    COMMA           reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    FROM            reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    EQ              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    NE              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    GT              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    LT              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    GE              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    LE              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    AND             reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    OR              reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    GROUP           reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    HAVING          reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    ORDER           reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    LIMIT           reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-    SEMICOLON       reduce using rule 59 (identifier -> IDENTIFIER DOT IDENTIFIER .)
-
-
-state 28
-
-    (11) column -> MIN LPAREN IDENTIFIER . RPAREN
+    (11) column -> COUNT LPAREN IDENTIFIER . RPAREN
 
     RPAREN          shift and go to state 38
 
 
-state 29
+state 27
 
-    (12) column -> MAX LPAREN IDENTIFIER . RPAREN
+    (60) identifier -> IDENTIFIER DOT IDENTIFIER .
+
+    COMMA           reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    FROM            reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    EQ              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    NE              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    GT              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    LT              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    GE              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    LE              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    AND             reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    OR              reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    GROUP           reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    HAVING          reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    ORDER           reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    LIMIT           reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    SEMICOLON       reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+    WHERE           reduce using rule 60 (identifier -> IDENTIFIER DOT IDENTIFIER .)
+
+
+state 28
+
+    (12) column -> MIN LPAREN IDENTIFIER . RPAREN
 
     RPAREN          shift and go to state 39
 
 
-state 30
+state 29
 
-    (13) column -> AVG LPAREN IDENTIFIER . RPAREN
+    (13) column -> MAX LPAREN IDENTIFIER . RPAREN
 
     RPAREN          shift and go to state 40
 
 
-state 31
+state 30
 
-    (14) column -> SUM LPAREN IDENTIFIER . RPAREN
+    (14) column -> AVG LPAREN IDENTIFIER . RPAREN
 
     RPAREN          shift and go to state 41
+
+
+state 31
+
+    (15) column -> SUM LPAREN IDENTIFIER . RPAREN
+
+    RPAREN          shift and go to state 42
 
 
 state 32
 
     (1) query -> SELECT select_list FROM table_list where_clause_opt . group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
-    (17) group_by_clause_opt -> . GROUP BY group_list
-    (18) group_by_clause_opt -> . empty
-    (57) empty -> .
+    (18) group_by_clause_opt -> . GROUP BY group_list
+    (19) group_by_clause_opt -> . empty
+    (58) empty -> .
 
-    GROUP           shift and go to state 43
-    HAVING          reduce using rule 57 (empty -> .)
-    ORDER           reduce using rule 57 (empty -> .)
-    LIMIT           reduce using rule 57 (empty -> .)
-    SEMICOLON       reduce using rule 57 (empty -> .)
+    GROUP           shift and go to state 44
+    HAVING          reduce using rule 58 (empty -> .)
+    ORDER           reduce using rule 58 (empty -> .)
+    LIMIT           reduce using rule 58 (empty -> .)
+    SEMICOLON       reduce using rule 58 (empty -> .)
 
-    group_by_clause_opt            shift and go to state 42
-    empty                          shift and go to state 44
+    group_by_clause_opt            shift and go to state 43
+    empty                          shift and go to state 45
 
 state 33
 
     (4) table_list -> table_list COMMA . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 45
+    IDENTIFIER      shift and go to state 46
 
 
 state 34
 
-    (15) where_clause_opt -> WHERE . condition
-    (23) condition -> . condition AND term
-    (24) condition -> . condition OR term
-    (25) condition -> . term
-    (26) term -> . comparison
-    (33) comparison -> . identifier operator identifier
-    (34) comparison -> . identifier operator literal
-    (35) comparison -> . aggregate_expr operator literal
-    (36) comparison -> . IDENTIFIER BETWEEN literal AND literal
-    (39) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
-    (27) aggregate_expr -> . COUNT LPAREN STAR RPAREN
-    (28) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
-    (29) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
-    (30) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
-    (31) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
-    (32) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
+    (16) where_clause_opt -> WHERE . condition
+    (24) condition -> . condition AND term
+    (25) condition -> . condition OR term
+    (26) condition -> . term
+    (27) term -> . comparison
+    (34) comparison -> . identifier operator identifier
+    (35) comparison -> . identifier operator literal
+    (36) comparison -> . aggregate_expr operator literal
+    (37) comparison -> . IDENTIFIER BETWEEN literal AND literal
+    (40) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (28) aggregate_expr -> . COUNT LPAREN STAR RPAREN
+    (29) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
+    (32) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
+    (33) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
 
-    IDENTIFIER      shift and go to state 51
-    COUNT           shift and go to state 52
-    MIN             shift and go to state 53
-    MAX             shift and go to state 54
-    AVG             shift and go to state 55
-    SUM             shift and go to state 56
+    IDENTIFIER      shift and go to state 52
+    COUNT           shift and go to state 53
+    MIN             shift and go to state 54
+    MAX             shift and go to state 55
+    AVG             shift and go to state 56
+    SUM             shift and go to state 57
 
-    condition                      shift and go to state 46
-    term                           shift and go to state 47
-    comparison                     shift and go to state 48
-    identifier                     shift and go to state 49
-    aggregate_expr                 shift and go to state 50
+    condition                      shift and go to state 47
+    term                           shift and go to state 48
+    comparison                     shift and go to state 49
+    identifier                     shift and go to state 50
+    aggregate_expr                 shift and go to state 51
 
 state 35
 
-    (16) where_clause_opt -> empty .
+    (17) where_clause_opt -> empty .
 
-    GROUP           reduce using rule 16 (where_clause_opt -> empty .)
-    HAVING          reduce using rule 16 (where_clause_opt -> empty .)
-    ORDER           reduce using rule 16 (where_clause_opt -> empty .)
-    LIMIT           reduce using rule 16 (where_clause_opt -> empty .)
-    SEMICOLON       reduce using rule 16 (where_clause_opt -> empty .)
+    GROUP           reduce using rule 17 (where_clause_opt -> empty .)
+    HAVING          reduce using rule 17 (where_clause_opt -> empty .)
+    ORDER           reduce using rule 17 (where_clause_opt -> empty .)
+    LIMIT           reduce using rule 17 (where_clause_opt -> empty .)
+    SEMICOLON       reduce using rule 17 (where_clause_opt -> empty .)
 
 
 state 36
 
-    (9) column -> COUNT LPAREN STAR RPAREN .
+    (5) table_list -> IDENTIFIER JOIN . IDENTIFIER ON condition
 
-    COMMA           reduce using rule 9 (column -> COUNT LPAREN STAR RPAREN .)
-    FROM            reduce using rule 9 (column -> COUNT LPAREN STAR RPAREN .)
+    IDENTIFIER      shift and go to state 58
 
 
 state 37
 
-    (10) column -> COUNT LPAREN IDENTIFIER RPAREN .
+    (10) column -> COUNT LPAREN STAR RPAREN .
 
-    COMMA           reduce using rule 10 (column -> COUNT LPAREN IDENTIFIER RPAREN .)
-    FROM            reduce using rule 10 (column -> COUNT LPAREN IDENTIFIER RPAREN .)
+    COMMA           reduce using rule 10 (column -> COUNT LPAREN STAR RPAREN .)
+    FROM            reduce using rule 10 (column -> COUNT LPAREN STAR RPAREN .)
 
 
 state 38
 
-    (11) column -> MIN LPAREN IDENTIFIER RPAREN .
+    (11) column -> COUNT LPAREN IDENTIFIER RPAREN .
 
-    COMMA           reduce using rule 11 (column -> MIN LPAREN IDENTIFIER RPAREN .)
-    FROM            reduce using rule 11 (column -> MIN LPAREN IDENTIFIER RPAREN .)
+    COMMA           reduce using rule 11 (column -> COUNT LPAREN IDENTIFIER RPAREN .)
+    FROM            reduce using rule 11 (column -> COUNT LPAREN IDENTIFIER RPAREN .)
 
 
 state 39
 
-    (12) column -> MAX LPAREN IDENTIFIER RPAREN .
+    (12) column -> MIN LPAREN IDENTIFIER RPAREN .
 
-    COMMA           reduce using rule 12 (column -> MAX LPAREN IDENTIFIER RPAREN .)
-    FROM            reduce using rule 12 (column -> MAX LPAREN IDENTIFIER RPAREN .)
+    COMMA           reduce using rule 12 (column -> MIN LPAREN IDENTIFIER RPAREN .)
+    FROM            reduce using rule 12 (column -> MIN LPAREN IDENTIFIER RPAREN .)
 
 
 state 40
 
-    (13) column -> AVG LPAREN IDENTIFIER RPAREN .
+    (13) column -> MAX LPAREN IDENTIFIER RPAREN .
 
-    COMMA           reduce using rule 13 (column -> AVG LPAREN IDENTIFIER RPAREN .)
-    FROM            reduce using rule 13 (column -> AVG LPAREN IDENTIFIER RPAREN .)
+    COMMA           reduce using rule 13 (column -> MAX LPAREN IDENTIFIER RPAREN .)
+    FROM            reduce using rule 13 (column -> MAX LPAREN IDENTIFIER RPAREN .)
 
 
 state 41
 
-    (14) column -> SUM LPAREN IDENTIFIER RPAREN .
+    (14) column -> AVG LPAREN IDENTIFIER RPAREN .
 
-    COMMA           reduce using rule 14 (column -> SUM LPAREN IDENTIFIER RPAREN .)
-    FROM            reduce using rule 14 (column -> SUM LPAREN IDENTIFIER RPAREN .)
+    COMMA           reduce using rule 14 (column -> AVG LPAREN IDENTIFIER RPAREN .)
+    FROM            reduce using rule 14 (column -> AVG LPAREN IDENTIFIER RPAREN .)
 
 
 state 42
 
-    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt . having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
-    (21) having_clause_opt -> . HAVING condition
-    (22) having_clause_opt -> . empty
-    (57) empty -> .
+    (15) column -> SUM LPAREN IDENTIFIER RPAREN .
 
-    HAVING          shift and go to state 58
-    ORDER           reduce using rule 57 (empty -> .)
-    LIMIT           reduce using rule 57 (empty -> .)
-    SEMICOLON       reduce using rule 57 (empty -> .)
+    COMMA           reduce using rule 15 (column -> SUM LPAREN IDENTIFIER RPAREN .)
+    FROM            reduce using rule 15 (column -> SUM LPAREN IDENTIFIER RPAREN .)
 
-    having_clause_opt              shift and go to state 57
-    empty                          shift and go to state 59
 
 state 43
 
-    (17) group_by_clause_opt -> GROUP . BY group_list
+    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt . having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON
+    (22) having_clause_opt -> . HAVING condition
+    (23) having_clause_opt -> . empty
+    (58) empty -> .
 
-    BY              shift and go to state 60
+    HAVING          shift and go to state 60
+    ORDER           reduce using rule 58 (empty -> .)
+    LIMIT           reduce using rule 58 (empty -> .)
+    SEMICOLON       reduce using rule 58 (empty -> .)
 
+    having_clause_opt              shift and go to state 59
+    empty                          shift and go to state 61
 
 state 44
 
-    (18) group_by_clause_opt -> empty .
+    (18) group_by_clause_opt -> GROUP . BY group_list
 
-    HAVING          reduce using rule 18 (group_by_clause_opt -> empty .)
-    ORDER           reduce using rule 18 (group_by_clause_opt -> empty .)
-    LIMIT           reduce using rule 18 (group_by_clause_opt -> empty .)
-    SEMICOLON       reduce using rule 18 (group_by_clause_opt -> empty .)
+    BY              shift and go to state 62
 
 
 state 45
+
+    (19) group_by_clause_opt -> empty .
+
+    HAVING          reduce using rule 19 (group_by_clause_opt -> empty .)
+    ORDER           reduce using rule 19 (group_by_clause_opt -> empty .)
+    LIMIT           reduce using rule 19 (group_by_clause_opt -> empty .)
+    SEMICOLON       reduce using rule 19 (group_by_clause_opt -> empty .)
+
+
+state 46
 
     (4) table_list -> table_list COMMA IDENTIFIER .
 
@@ -606,903 +621,981 @@ state 45
     SEMICOLON       reduce using rule 4 (table_list -> table_list COMMA IDENTIFIER .)
 
 
-state 46
-
-    (15) where_clause_opt -> WHERE condition .
-    (23) condition -> condition . AND term
-    (24) condition -> condition . OR term
-
-    GROUP           reduce using rule 15 (where_clause_opt -> WHERE condition .)
-    HAVING          reduce using rule 15 (where_clause_opt -> WHERE condition .)
-    ORDER           reduce using rule 15 (where_clause_opt -> WHERE condition .)
-    LIMIT           reduce using rule 15 (where_clause_opt -> WHERE condition .)
-    SEMICOLON       reduce using rule 15 (where_clause_opt -> WHERE condition .)
-    AND             shift and go to state 61
-    OR              shift and go to state 62
-
-
 state 47
 
-    (25) condition -> term .
+    (16) where_clause_opt -> WHERE condition .
+    (24) condition -> condition . AND term
+    (25) condition -> condition . OR term
 
-    AND             reduce using rule 25 (condition -> term .)
-    OR              reduce using rule 25 (condition -> term .)
-    GROUP           reduce using rule 25 (condition -> term .)
-    HAVING          reduce using rule 25 (condition -> term .)
-    ORDER           reduce using rule 25 (condition -> term .)
-    LIMIT           reduce using rule 25 (condition -> term .)
-    SEMICOLON       reduce using rule 25 (condition -> term .)
+    GROUP           reduce using rule 16 (where_clause_opt -> WHERE condition .)
+    HAVING          reduce using rule 16 (where_clause_opt -> WHERE condition .)
+    ORDER           reduce using rule 16 (where_clause_opt -> WHERE condition .)
+    LIMIT           reduce using rule 16 (where_clause_opt -> WHERE condition .)
+    SEMICOLON       reduce using rule 16 (where_clause_opt -> WHERE condition .)
+    AND             shift and go to state 63
+    OR              shift and go to state 64
 
 
 state 48
 
-    (26) term -> comparison .
+    (26) condition -> term .
 
-    AND             reduce using rule 26 (term -> comparison .)
-    OR              reduce using rule 26 (term -> comparison .)
-    GROUP           reduce using rule 26 (term -> comparison .)
-    HAVING          reduce using rule 26 (term -> comparison .)
-    ORDER           reduce using rule 26 (term -> comparison .)
-    LIMIT           reduce using rule 26 (term -> comparison .)
-    SEMICOLON       reduce using rule 26 (term -> comparison .)
+    AND             reduce using rule 26 (condition -> term .)
+    OR              reduce using rule 26 (condition -> term .)
+    GROUP           reduce using rule 26 (condition -> term .)
+    HAVING          reduce using rule 26 (condition -> term .)
+    ORDER           reduce using rule 26 (condition -> term .)
+    LIMIT           reduce using rule 26 (condition -> term .)
+    SEMICOLON       reduce using rule 26 (condition -> term .)
+    COMMA           reduce using rule 26 (condition -> term .)
+    WHERE           reduce using rule 26 (condition -> term .)
 
 
 state 49
 
-    (33) comparison -> identifier . operator identifier
-    (34) comparison -> identifier . operator literal
-    (40) operator -> . EQ
-    (41) operator -> . NE
-    (42) operator -> . GT
-    (43) operator -> . LT
-    (44) operator -> . GE
-    (45) operator -> . LE
+    (27) term -> comparison .
 
-    EQ              shift and go to state 64
-    NE              shift and go to state 65
-    GT              shift and go to state 66
-    LT              shift and go to state 67
-    GE              shift and go to state 68
-    LE              shift and go to state 69
+    AND             reduce using rule 27 (term -> comparison .)
+    OR              reduce using rule 27 (term -> comparison .)
+    GROUP           reduce using rule 27 (term -> comparison .)
+    HAVING          reduce using rule 27 (term -> comparison .)
+    ORDER           reduce using rule 27 (term -> comparison .)
+    LIMIT           reduce using rule 27 (term -> comparison .)
+    SEMICOLON       reduce using rule 27 (term -> comparison .)
+    COMMA           reduce using rule 27 (term -> comparison .)
+    WHERE           reduce using rule 27 (term -> comparison .)
 
-    operator                       shift and go to state 63
 
 state 50
 
-    (35) comparison -> aggregate_expr . operator literal
-    (40) operator -> . EQ
-    (41) operator -> . NE
-    (42) operator -> . GT
-    (43) operator -> . LT
-    (44) operator -> . GE
-    (45) operator -> . LE
+    (34) comparison -> identifier . operator identifier
+    (35) comparison -> identifier . operator literal
+    (41) operator -> . EQ
+    (42) operator -> . NE
+    (43) operator -> . GT
+    (44) operator -> . LT
+    (45) operator -> . GE
+    (46) operator -> . LE
 
-    EQ              shift and go to state 64
-    NE              shift and go to state 65
-    GT              shift and go to state 66
-    LT              shift and go to state 67
-    GE              shift and go to state 68
-    LE              shift and go to state 69
+    EQ              shift and go to state 66
+    NE              shift and go to state 67
+    GT              shift and go to state 68
+    LT              shift and go to state 69
+    GE              shift and go to state 70
+    LE              shift and go to state 71
 
-    operator                       shift and go to state 70
+    operator                       shift and go to state 65
 
 state 51
 
-    (36) comparison -> IDENTIFIER . BETWEEN literal AND literal
-    (39) comparison -> IDENTIFIER . IN LPAREN literal_list RPAREN
-    (58) identifier -> IDENTIFIER .
-    (59) identifier -> IDENTIFIER . DOT IDENTIFIER
+    (36) comparison -> aggregate_expr . operator literal
+    (41) operator -> . EQ
+    (42) operator -> . NE
+    (43) operator -> . GT
+    (44) operator -> . LT
+    (45) operator -> . GE
+    (46) operator -> . LE
 
-    BETWEEN         shift and go to state 71
-    IN              shift and go to state 72
-    EQ              reduce using rule 58 (identifier -> IDENTIFIER .)
-    NE              reduce using rule 58 (identifier -> IDENTIFIER .)
-    GT              reduce using rule 58 (identifier -> IDENTIFIER .)
-    LT              reduce using rule 58 (identifier -> IDENTIFIER .)
-    GE              reduce using rule 58 (identifier -> IDENTIFIER .)
-    LE              reduce using rule 58 (identifier -> IDENTIFIER .)
-    DOT             shift and go to state 17
+    EQ              shift and go to state 66
+    NE              shift and go to state 67
+    GT              shift and go to state 68
+    LT              shift and go to state 69
+    GE              shift and go to state 70
+    LE              shift and go to state 71
 
+    operator                       shift and go to state 72
 
 state 52
 
-    (27) aggregate_expr -> COUNT . LPAREN STAR RPAREN
-    (28) aggregate_expr -> COUNT . LPAREN IDENTIFIER RPAREN
+    (37) comparison -> IDENTIFIER . BETWEEN literal AND literal
+    (40) comparison -> IDENTIFIER . IN LPAREN literal_list RPAREN
+    (59) identifier -> IDENTIFIER .
+    (60) identifier -> IDENTIFIER . DOT IDENTIFIER
 
-    LPAREN          shift and go to state 73
+    BETWEEN         shift and go to state 73
+    IN              shift and go to state 74
+    EQ              reduce using rule 59 (identifier -> IDENTIFIER .)
+    NE              reduce using rule 59 (identifier -> IDENTIFIER .)
+    GT              reduce using rule 59 (identifier -> IDENTIFIER .)
+    LT              reduce using rule 59 (identifier -> IDENTIFIER .)
+    GE              reduce using rule 59 (identifier -> IDENTIFIER .)
+    LE              reduce using rule 59 (identifier -> IDENTIFIER .)
+    DOT             shift and go to state 17
 
 
 state 53
 
-    (29) aggregate_expr -> MIN . LPAREN IDENTIFIER RPAREN
-
-    LPAREN          shift and go to state 74
-
-
-state 54
-
-    (30) aggregate_expr -> MAX . LPAREN IDENTIFIER RPAREN
+    (28) aggregate_expr -> COUNT . LPAREN STAR RPAREN
+    (29) aggregate_expr -> COUNT . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 75
 
 
-state 55
+state 54
 
-    (31) aggregate_expr -> AVG . LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> MIN . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 76
 
 
-state 56
+state 55
 
-    (32) aggregate_expr -> SUM . LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> MAX . LPAREN IDENTIFIER RPAREN
 
     LPAREN          shift and go to state 77
 
 
+state 56
+
+    (32) aggregate_expr -> AVG . LPAREN IDENTIFIER RPAREN
+
+    LPAREN          shift and go to state 78
+
+
 state 57
 
-    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt . order_by_clause_opt limit_clause_opt SEMICOLON
-    (48) order_by_clause_opt -> . ORDER BY order_list
-    (49) order_by_clause_opt -> . empty
-    (57) empty -> .
+    (33) aggregate_expr -> SUM . LPAREN IDENTIFIER RPAREN
 
-    ORDER           shift and go to state 79
-    LIMIT           reduce using rule 57 (empty -> .)
-    SEMICOLON       reduce using rule 57 (empty -> .)
+    LPAREN          shift and go to state 79
 
-    order_by_clause_opt            shift and go to state 78
-    empty                          shift and go to state 80
 
 state 58
 
-    (21) having_clause_opt -> HAVING . condition
-    (23) condition -> . condition AND term
-    (24) condition -> . condition OR term
-    (25) condition -> . term
-    (26) term -> . comparison
-    (33) comparison -> . identifier operator identifier
-    (34) comparison -> . identifier operator literal
-    (35) comparison -> . aggregate_expr operator literal
-    (36) comparison -> . IDENTIFIER BETWEEN literal AND literal
-    (39) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
-    (27) aggregate_expr -> . COUNT LPAREN STAR RPAREN
-    (28) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
-    (29) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
-    (30) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
-    (31) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
-    (32) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
+    (5) table_list -> IDENTIFIER JOIN IDENTIFIER . ON condition
 
-    IDENTIFIER      shift and go to state 51
-    COUNT           shift and go to state 52
-    MIN             shift and go to state 53
-    MAX             shift and go to state 54
-    AVG             shift and go to state 55
-    SUM             shift and go to state 56
+    ON              shift and go to state 80
 
-    condition                      shift and go to state 81
-    term                           shift and go to state 47
-    comparison                     shift and go to state 48
-    identifier                     shift and go to state 49
-    aggregate_expr                 shift and go to state 50
 
 state 59
 
-    (22) having_clause_opt -> empty .
+    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt . order_by_clause_opt limit_clause_opt SEMICOLON
+    (49) order_by_clause_opt -> . ORDER BY order_list
+    (50) order_by_clause_opt -> . empty
+    (58) empty -> .
 
-    ORDER           reduce using rule 22 (having_clause_opt -> empty .)
-    LIMIT           reduce using rule 22 (having_clause_opt -> empty .)
-    SEMICOLON       reduce using rule 22 (having_clause_opt -> empty .)
+    ORDER           shift and go to state 82
+    LIMIT           reduce using rule 58 (empty -> .)
+    SEMICOLON       reduce using rule 58 (empty -> .)
 
+    order_by_clause_opt            shift and go to state 81
+    empty                          shift and go to state 83
 
 state 60
 
-    (17) group_by_clause_opt -> GROUP BY . group_list
-    (19) group_list -> . IDENTIFIER
-    (20) group_list -> . group_list COMMA IDENTIFIER
+    (22) having_clause_opt -> HAVING . condition
+    (24) condition -> . condition AND term
+    (25) condition -> . condition OR term
+    (26) condition -> . term
+    (27) term -> . comparison
+    (34) comparison -> . identifier operator identifier
+    (35) comparison -> . identifier operator literal
+    (36) comparison -> . aggregate_expr operator literal
+    (37) comparison -> . IDENTIFIER BETWEEN literal AND literal
+    (40) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (28) aggregate_expr -> . COUNT LPAREN STAR RPAREN
+    (29) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
+    (32) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
+    (33) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
 
-    IDENTIFIER      shift and go to state 83
+    IDENTIFIER      shift and go to state 52
+    COUNT           shift and go to state 53
+    MIN             shift and go to state 54
+    MAX             shift and go to state 55
+    AVG             shift and go to state 56
+    SUM             shift and go to state 57
 
-    group_list                     shift and go to state 82
+    condition                      shift and go to state 84
+    term                           shift and go to state 48
+    comparison                     shift and go to state 49
+    identifier                     shift and go to state 50
+    aggregate_expr                 shift and go to state 51
 
 state 61
 
-    (23) condition -> condition AND . term
-    (26) term -> . comparison
-    (33) comparison -> . identifier operator identifier
-    (34) comparison -> . identifier operator literal
-    (35) comparison -> . aggregate_expr operator literal
-    (36) comparison -> . IDENTIFIER BETWEEN literal AND literal
-    (39) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
-    (27) aggregate_expr -> . COUNT LPAREN STAR RPAREN
-    (28) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
-    (29) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
-    (30) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
-    (31) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
-    (32) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
+    (23) having_clause_opt -> empty .
 
-    IDENTIFIER      shift and go to state 51
-    COUNT           shift and go to state 52
-    MIN             shift and go to state 53
-    MAX             shift and go to state 54
-    AVG             shift and go to state 55
-    SUM             shift and go to state 56
+    ORDER           reduce using rule 23 (having_clause_opt -> empty .)
+    LIMIT           reduce using rule 23 (having_clause_opt -> empty .)
+    SEMICOLON       reduce using rule 23 (having_clause_opt -> empty .)
 
-    term                           shift and go to state 84
-    comparison                     shift and go to state 48
-    identifier                     shift and go to state 49
-    aggregate_expr                 shift and go to state 50
 
 state 62
 
-    (24) condition -> condition OR . term
-    (26) term -> . comparison
-    (33) comparison -> . identifier operator identifier
-    (34) comparison -> . identifier operator literal
-    (35) comparison -> . aggregate_expr operator literal
-    (36) comparison -> . IDENTIFIER BETWEEN literal AND literal
-    (39) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
-    (27) aggregate_expr -> . COUNT LPAREN STAR RPAREN
-    (28) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
-    (29) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
-    (30) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
-    (31) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
-    (32) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
+    (18) group_by_clause_opt -> GROUP BY . group_list
+    (20) group_list -> . IDENTIFIER
+    (21) group_list -> . group_list COMMA IDENTIFIER
 
-    IDENTIFIER      shift and go to state 51
-    COUNT           shift and go to state 52
-    MIN             shift and go to state 53
-    MAX             shift and go to state 54
-    AVG             shift and go to state 55
-    SUM             shift and go to state 56
+    IDENTIFIER      shift and go to state 86
 
-    term                           shift and go to state 85
-    comparison                     shift and go to state 48
-    identifier                     shift and go to state 49
-    aggregate_expr                 shift and go to state 50
+    group_list                     shift and go to state 85
 
 state 63
 
-    (33) comparison -> identifier operator . identifier
-    (34) comparison -> identifier operator . literal
-    (58) identifier -> . IDENTIFIER
-    (59) identifier -> . IDENTIFIER DOT IDENTIFIER
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (24) condition -> condition AND . term
+    (27) term -> . comparison
+    (34) comparison -> . identifier operator identifier
+    (35) comparison -> . identifier operator literal
+    (36) comparison -> . aggregate_expr operator literal
+    (37) comparison -> . IDENTIFIER BETWEEN literal AND literal
+    (40) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (28) aggregate_expr -> . COUNT LPAREN STAR RPAREN
+    (29) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
+    (32) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
+    (33) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
 
-    IDENTIFIER      shift and go to state 9
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    IDENTIFIER      shift and go to state 52
+    COUNT           shift and go to state 53
+    MIN             shift and go to state 54
+    MAX             shift and go to state 55
+    AVG             shift and go to state 56
+    SUM             shift and go to state 57
 
-    identifier                     shift and go to state 86
-    literal                        shift and go to state 87
+    term                           shift and go to state 87
+    comparison                     shift and go to state 49
+    identifier                     shift and go to state 50
+    aggregate_expr                 shift and go to state 51
 
 state 64
 
-    (40) operator -> EQ .
+    (25) condition -> condition OR . term
+    (27) term -> . comparison
+    (34) comparison -> . identifier operator identifier
+    (35) comparison -> . identifier operator literal
+    (36) comparison -> . aggregate_expr operator literal
+    (37) comparison -> . IDENTIFIER BETWEEN literal AND literal
+    (40) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (28) aggregate_expr -> . COUNT LPAREN STAR RPAREN
+    (29) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
+    (32) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
+    (33) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
 
-    IDENTIFIER      reduce using rule 40 (operator -> EQ .)
-    NUMBER          reduce using rule 40 (operator -> EQ .)
-    STRING          reduce using rule 40 (operator -> EQ .)
+    IDENTIFIER      shift and go to state 52
+    COUNT           shift and go to state 53
+    MIN             shift and go to state 54
+    MAX             shift and go to state 55
+    AVG             shift and go to state 56
+    SUM             shift and go to state 57
 
+    term                           shift and go to state 88
+    comparison                     shift and go to state 49
+    identifier                     shift and go to state 50
+    aggregate_expr                 shift and go to state 51
 
 state 65
 
-    (41) operator -> NE .
+    (34) comparison -> identifier operator . identifier
+    (35) comparison -> identifier operator . literal
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    IDENTIFIER      reduce using rule 41 (operator -> NE .)
-    NUMBER          reduce using rule 41 (operator -> NE .)
-    STRING          reduce using rule 41 (operator -> NE .)
+    IDENTIFIER      shift and go to state 9
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    identifier                     shift and go to state 89
+    literal                        shift and go to state 90
 
 state 66
 
-    (42) operator -> GT .
+    (41) operator -> EQ .
 
-    IDENTIFIER      reduce using rule 42 (operator -> GT .)
-    NUMBER          reduce using rule 42 (operator -> GT .)
-    STRING          reduce using rule 42 (operator -> GT .)
+    IDENTIFIER      reduce using rule 41 (operator -> EQ .)
+    NUMBER          reduce using rule 41 (operator -> EQ .)
+    STRING          reduce using rule 41 (operator -> EQ .)
 
 
 state 67
 
-    (43) operator -> LT .
+    (42) operator -> NE .
 
-    IDENTIFIER      reduce using rule 43 (operator -> LT .)
-    NUMBER          reduce using rule 43 (operator -> LT .)
-    STRING          reduce using rule 43 (operator -> LT .)
+    IDENTIFIER      reduce using rule 42 (operator -> NE .)
+    NUMBER          reduce using rule 42 (operator -> NE .)
+    STRING          reduce using rule 42 (operator -> NE .)
 
 
 state 68
 
-    (44) operator -> GE .
+    (43) operator -> GT .
 
-    IDENTIFIER      reduce using rule 44 (operator -> GE .)
-    NUMBER          reduce using rule 44 (operator -> GE .)
-    STRING          reduce using rule 44 (operator -> GE .)
+    IDENTIFIER      reduce using rule 43 (operator -> GT .)
+    NUMBER          reduce using rule 43 (operator -> GT .)
+    STRING          reduce using rule 43 (operator -> GT .)
 
 
 state 69
 
-    (45) operator -> LE .
+    (44) operator -> LT .
 
-    IDENTIFIER      reduce using rule 45 (operator -> LE .)
-    NUMBER          reduce using rule 45 (operator -> LE .)
-    STRING          reduce using rule 45 (operator -> LE .)
+    IDENTIFIER      reduce using rule 44 (operator -> LT .)
+    NUMBER          reduce using rule 44 (operator -> LT .)
+    STRING          reduce using rule 44 (operator -> LT .)
 
 
 state 70
 
-    (35) comparison -> aggregate_expr operator . literal
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (45) operator -> GE .
 
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    IDENTIFIER      reduce using rule 45 (operator -> GE .)
+    NUMBER          reduce using rule 45 (operator -> GE .)
+    STRING          reduce using rule 45 (operator -> GE .)
 
-    literal                        shift and go to state 90
 
 state 71
 
-    (36) comparison -> IDENTIFIER BETWEEN . literal AND literal
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (46) operator -> LE .
 
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    IDENTIFIER      reduce using rule 46 (operator -> LE .)
+    NUMBER          reduce using rule 46 (operator -> LE .)
+    STRING          reduce using rule 46 (operator -> LE .)
 
-    literal                        shift and go to state 91
 
 state 72
 
-    (39) comparison -> IDENTIFIER IN . LPAREN literal_list RPAREN
+    (36) comparison -> aggregate_expr operator . literal
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    LPAREN          shift and go to state 92
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    literal                        shift and go to state 93
 
 state 73
 
-    (27) aggregate_expr -> COUNT LPAREN . STAR RPAREN
-    (28) aggregate_expr -> COUNT LPAREN . IDENTIFIER RPAREN
+    (37) comparison -> IDENTIFIER BETWEEN . literal AND literal
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    STAR            shift and go to state 93
-    IDENTIFIER      shift and go to state 94
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    literal                        shift and go to state 94
 
 state 74
 
-    (29) aggregate_expr -> MIN LPAREN . IDENTIFIER RPAREN
+    (40) comparison -> IDENTIFIER IN . LPAREN literal_list RPAREN
 
-    IDENTIFIER      shift and go to state 95
+    LPAREN          shift and go to state 95
 
 
 state 75
 
-    (30) aggregate_expr -> MAX LPAREN . IDENTIFIER RPAREN
+    (28) aggregate_expr -> COUNT LPAREN . STAR RPAREN
+    (29) aggregate_expr -> COUNT LPAREN . IDENTIFIER RPAREN
 
-    IDENTIFIER      shift and go to state 96
+    STAR            shift and go to state 96
+    IDENTIFIER      shift and go to state 97
 
 
 state 76
 
-    (31) aggregate_expr -> AVG LPAREN . IDENTIFIER RPAREN
-
-    IDENTIFIER      shift and go to state 97
-
-
-state 77
-
-    (32) aggregate_expr -> SUM LPAREN . IDENTIFIER RPAREN
+    (30) aggregate_expr -> MIN LPAREN . IDENTIFIER RPAREN
 
     IDENTIFIER      shift and go to state 98
 
 
+state 77
+
+    (31) aggregate_expr -> MAX LPAREN . IDENTIFIER RPAREN
+
+    IDENTIFIER      shift and go to state 99
+
+
 state 78
 
-    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt . limit_clause_opt SEMICOLON
-    (55) limit_clause_opt -> . LIMIT NUMBER
-    (56) limit_clause_opt -> . empty
-    (57) empty -> .
+    (32) aggregate_expr -> AVG LPAREN . IDENTIFIER RPAREN
 
-    LIMIT           shift and go to state 100
-    SEMICOLON       reduce using rule 57 (empty -> .)
+    IDENTIFIER      shift and go to state 100
 
-    limit_clause_opt               shift and go to state 99
-    empty                          shift and go to state 101
 
 state 79
 
-    (48) order_by_clause_opt -> ORDER . BY order_list
+    (33) aggregate_expr -> SUM LPAREN . IDENTIFIER RPAREN
 
-    BY              shift and go to state 102
+    IDENTIFIER      shift and go to state 101
 
 
 state 80
 
-    (49) order_by_clause_opt -> empty .
+    (5) table_list -> IDENTIFIER JOIN IDENTIFIER ON . condition
+    (24) condition -> . condition AND term
+    (25) condition -> . condition OR term
+    (26) condition -> . term
+    (27) term -> . comparison
+    (34) comparison -> . identifier operator identifier
+    (35) comparison -> . identifier operator literal
+    (36) comparison -> . aggregate_expr operator literal
+    (37) comparison -> . IDENTIFIER BETWEEN literal AND literal
+    (40) comparison -> . IDENTIFIER IN LPAREN literal_list RPAREN
+    (59) identifier -> . IDENTIFIER
+    (60) identifier -> . IDENTIFIER DOT IDENTIFIER
+    (28) aggregate_expr -> . COUNT LPAREN STAR RPAREN
+    (29) aggregate_expr -> . COUNT LPAREN IDENTIFIER RPAREN
+    (30) aggregate_expr -> . MIN LPAREN IDENTIFIER RPAREN
+    (31) aggregate_expr -> . MAX LPAREN IDENTIFIER RPAREN
+    (32) aggregate_expr -> . AVG LPAREN IDENTIFIER RPAREN
+    (33) aggregate_expr -> . SUM LPAREN IDENTIFIER RPAREN
 
-    LIMIT           reduce using rule 49 (order_by_clause_opt -> empty .)
-    SEMICOLON       reduce using rule 49 (order_by_clause_opt -> empty .)
+    IDENTIFIER      shift and go to state 52
+    COUNT           shift and go to state 53
+    MIN             shift and go to state 54
+    MAX             shift and go to state 55
+    AVG             shift and go to state 56
+    SUM             shift and go to state 57
 
+    condition                      shift and go to state 102
+    term                           shift and go to state 48
+    comparison                     shift and go to state 49
+    identifier                     shift and go to state 50
+    aggregate_expr                 shift and go to state 51
 
 state 81
 
-    (21) having_clause_opt -> HAVING condition .
-    (23) condition -> condition . AND term
-    (24) condition -> condition . OR term
+    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt . limit_clause_opt SEMICOLON
+    (56) limit_clause_opt -> . LIMIT NUMBER
+    (57) limit_clause_opt -> . empty
+    (58) empty -> .
 
-    ORDER           reduce using rule 21 (having_clause_opt -> HAVING condition .)
-    LIMIT           reduce using rule 21 (having_clause_opt -> HAVING condition .)
-    SEMICOLON       reduce using rule 21 (having_clause_opt -> HAVING condition .)
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    LIMIT           shift and go to state 104
+    SEMICOLON       reduce using rule 58 (empty -> .)
 
+    limit_clause_opt               shift and go to state 103
+    empty                          shift and go to state 105
 
 state 82
 
-    (17) group_by_clause_opt -> GROUP BY group_list .
-    (20) group_list -> group_list . COMMA IDENTIFIER
+    (49) order_by_clause_opt -> ORDER . BY order_list
 
-    HAVING          reduce using rule 17 (group_by_clause_opt -> GROUP BY group_list .)
-    ORDER           reduce using rule 17 (group_by_clause_opt -> GROUP BY group_list .)
-    LIMIT           reduce using rule 17 (group_by_clause_opt -> GROUP BY group_list .)
-    SEMICOLON       reduce using rule 17 (group_by_clause_opt -> GROUP BY group_list .)
-    COMMA           shift and go to state 103
+    BY              shift and go to state 106
 
 
 state 83
 
-    (19) group_list -> IDENTIFIER .
+    (50) order_by_clause_opt -> empty .
 
-    COMMA           reduce using rule 19 (group_list -> IDENTIFIER .)
-    HAVING          reduce using rule 19 (group_list -> IDENTIFIER .)
-    ORDER           reduce using rule 19 (group_list -> IDENTIFIER .)
-    LIMIT           reduce using rule 19 (group_list -> IDENTIFIER .)
-    SEMICOLON       reduce using rule 19 (group_list -> IDENTIFIER .)
+    LIMIT           reduce using rule 50 (order_by_clause_opt -> empty .)
+    SEMICOLON       reduce using rule 50 (order_by_clause_opt -> empty .)
 
 
 state 84
 
-    (23) condition -> condition AND term .
+    (22) having_clause_opt -> HAVING condition .
+    (24) condition -> condition . AND term
+    (25) condition -> condition . OR term
 
-    AND             reduce using rule 23 (condition -> condition AND term .)
-    OR              reduce using rule 23 (condition -> condition AND term .)
-    GROUP           reduce using rule 23 (condition -> condition AND term .)
-    HAVING          reduce using rule 23 (condition -> condition AND term .)
-    ORDER           reduce using rule 23 (condition -> condition AND term .)
-    LIMIT           reduce using rule 23 (condition -> condition AND term .)
-    SEMICOLON       reduce using rule 23 (condition -> condition AND term .)
+    ORDER           reduce using rule 22 (having_clause_opt -> HAVING condition .)
+    LIMIT           reduce using rule 22 (having_clause_opt -> HAVING condition .)
+    SEMICOLON       reduce using rule 22 (having_clause_opt -> HAVING condition .)
+    AND             shift and go to state 63
+    OR              shift and go to state 64
 
 
 state 85
 
-    (24) condition -> condition OR term .
+    (18) group_by_clause_opt -> GROUP BY group_list .
+    (21) group_list -> group_list . COMMA IDENTIFIER
 
-    AND             reduce using rule 24 (condition -> condition OR term .)
-    OR              reduce using rule 24 (condition -> condition OR term .)
-    GROUP           reduce using rule 24 (condition -> condition OR term .)
-    HAVING          reduce using rule 24 (condition -> condition OR term .)
-    ORDER           reduce using rule 24 (condition -> condition OR term .)
-    LIMIT           reduce using rule 24 (condition -> condition OR term .)
-    SEMICOLON       reduce using rule 24 (condition -> condition OR term .)
+    HAVING          reduce using rule 18 (group_by_clause_opt -> GROUP BY group_list .)
+    ORDER           reduce using rule 18 (group_by_clause_opt -> GROUP BY group_list .)
+    LIMIT           reduce using rule 18 (group_by_clause_opt -> GROUP BY group_list .)
+    SEMICOLON       reduce using rule 18 (group_by_clause_opt -> GROUP BY group_list .)
+    COMMA           shift and go to state 107
 
 
 state 86
 
-    (33) comparison -> identifier operator identifier .
+    (20) group_list -> IDENTIFIER .
 
-    AND             reduce using rule 33 (comparison -> identifier operator identifier .)
-    OR              reduce using rule 33 (comparison -> identifier operator identifier .)
-    GROUP           reduce using rule 33 (comparison -> identifier operator identifier .)
-    HAVING          reduce using rule 33 (comparison -> identifier operator identifier .)
-    ORDER           reduce using rule 33 (comparison -> identifier operator identifier .)
-    LIMIT           reduce using rule 33 (comparison -> identifier operator identifier .)
-    SEMICOLON       reduce using rule 33 (comparison -> identifier operator identifier .)
+    COMMA           reduce using rule 20 (group_list -> IDENTIFIER .)
+    HAVING          reduce using rule 20 (group_list -> IDENTIFIER .)
+    ORDER           reduce using rule 20 (group_list -> IDENTIFIER .)
+    LIMIT           reduce using rule 20 (group_list -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 20 (group_list -> IDENTIFIER .)
 
 
 state 87
 
-    (34) comparison -> identifier operator literal .
+    (24) condition -> condition AND term .
 
-    AND             reduce using rule 34 (comparison -> identifier operator literal .)
-    OR              reduce using rule 34 (comparison -> identifier operator literal .)
-    GROUP           reduce using rule 34 (comparison -> identifier operator literal .)
-    HAVING          reduce using rule 34 (comparison -> identifier operator literal .)
-    ORDER           reduce using rule 34 (comparison -> identifier operator literal .)
-    LIMIT           reduce using rule 34 (comparison -> identifier operator literal .)
-    SEMICOLON       reduce using rule 34 (comparison -> identifier operator literal .)
+    AND             reduce using rule 24 (condition -> condition AND term .)
+    OR              reduce using rule 24 (condition -> condition AND term .)
+    GROUP           reduce using rule 24 (condition -> condition AND term .)
+    HAVING          reduce using rule 24 (condition -> condition AND term .)
+    ORDER           reduce using rule 24 (condition -> condition AND term .)
+    LIMIT           reduce using rule 24 (condition -> condition AND term .)
+    SEMICOLON       reduce using rule 24 (condition -> condition AND term .)
+    COMMA           reduce using rule 24 (condition -> condition AND term .)
+    WHERE           reduce using rule 24 (condition -> condition AND term .)
 
 
 state 88
 
-    (46) literal -> NUMBER .
+    (25) condition -> condition OR term .
 
-    AND             reduce using rule 46 (literal -> NUMBER .)
-    OR              reduce using rule 46 (literal -> NUMBER .)
-    GROUP           reduce using rule 46 (literal -> NUMBER .)
-    HAVING          reduce using rule 46 (literal -> NUMBER .)
-    ORDER           reduce using rule 46 (literal -> NUMBER .)
-    LIMIT           reduce using rule 46 (literal -> NUMBER .)
-    SEMICOLON       reduce using rule 46 (literal -> NUMBER .)
-    RPAREN          reduce using rule 46 (literal -> NUMBER .)
-    COMMA           reduce using rule 46 (literal -> NUMBER .)
+    AND             reduce using rule 25 (condition -> condition OR term .)
+    OR              reduce using rule 25 (condition -> condition OR term .)
+    GROUP           reduce using rule 25 (condition -> condition OR term .)
+    HAVING          reduce using rule 25 (condition -> condition OR term .)
+    ORDER           reduce using rule 25 (condition -> condition OR term .)
+    LIMIT           reduce using rule 25 (condition -> condition OR term .)
+    SEMICOLON       reduce using rule 25 (condition -> condition OR term .)
+    COMMA           reduce using rule 25 (condition -> condition OR term .)
+    WHERE           reduce using rule 25 (condition -> condition OR term .)
 
 
 state 89
 
-    (47) literal -> STRING .
+    (34) comparison -> identifier operator identifier .
 
-    AND             reduce using rule 47 (literal -> STRING .)
-    OR              reduce using rule 47 (literal -> STRING .)
-    GROUP           reduce using rule 47 (literal -> STRING .)
-    HAVING          reduce using rule 47 (literal -> STRING .)
-    ORDER           reduce using rule 47 (literal -> STRING .)
-    LIMIT           reduce using rule 47 (literal -> STRING .)
-    SEMICOLON       reduce using rule 47 (literal -> STRING .)
-    RPAREN          reduce using rule 47 (literal -> STRING .)
-    COMMA           reduce using rule 47 (literal -> STRING .)
+    AND             reduce using rule 34 (comparison -> identifier operator identifier .)
+    OR              reduce using rule 34 (comparison -> identifier operator identifier .)
+    GROUP           reduce using rule 34 (comparison -> identifier operator identifier .)
+    HAVING          reduce using rule 34 (comparison -> identifier operator identifier .)
+    ORDER           reduce using rule 34 (comparison -> identifier operator identifier .)
+    LIMIT           reduce using rule 34 (comparison -> identifier operator identifier .)
+    SEMICOLON       reduce using rule 34 (comparison -> identifier operator identifier .)
+    COMMA           reduce using rule 34 (comparison -> identifier operator identifier .)
+    WHERE           reduce using rule 34 (comparison -> identifier operator identifier .)
 
 
 state 90
 
-    (35) comparison -> aggregate_expr operator literal .
+    (35) comparison -> identifier operator literal .
 
-    AND             reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    OR              reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    GROUP           reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    HAVING          reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    ORDER           reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    LIMIT           reduce using rule 35 (comparison -> aggregate_expr operator literal .)
-    SEMICOLON       reduce using rule 35 (comparison -> aggregate_expr operator literal .)
+    AND             reduce using rule 35 (comparison -> identifier operator literal .)
+    OR              reduce using rule 35 (comparison -> identifier operator literal .)
+    GROUP           reduce using rule 35 (comparison -> identifier operator literal .)
+    HAVING          reduce using rule 35 (comparison -> identifier operator literal .)
+    ORDER           reduce using rule 35 (comparison -> identifier operator literal .)
+    LIMIT           reduce using rule 35 (comparison -> identifier operator literal .)
+    SEMICOLON       reduce using rule 35 (comparison -> identifier operator literal .)
+    COMMA           reduce using rule 35 (comparison -> identifier operator literal .)
+    WHERE           reduce using rule 35 (comparison -> identifier operator literal .)
 
 
 state 91
 
-    (36) comparison -> IDENTIFIER BETWEEN literal . AND literal
+    (47) literal -> NUMBER .
 
-    AND             shift and go to state 104
+    AND             reduce using rule 47 (literal -> NUMBER .)
+    OR              reduce using rule 47 (literal -> NUMBER .)
+    GROUP           reduce using rule 47 (literal -> NUMBER .)
+    HAVING          reduce using rule 47 (literal -> NUMBER .)
+    ORDER           reduce using rule 47 (literal -> NUMBER .)
+    LIMIT           reduce using rule 47 (literal -> NUMBER .)
+    SEMICOLON       reduce using rule 47 (literal -> NUMBER .)
+    COMMA           reduce using rule 47 (literal -> NUMBER .)
+    WHERE           reduce using rule 47 (literal -> NUMBER .)
+    RPAREN          reduce using rule 47 (literal -> NUMBER .)
 
 
 state 92
 
-    (39) comparison -> IDENTIFIER IN LPAREN . literal_list RPAREN
-    (37) literal_list -> . literal
-    (38) literal_list -> . literal_list COMMA literal
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (48) literal -> STRING .
 
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    AND             reduce using rule 48 (literal -> STRING .)
+    OR              reduce using rule 48 (literal -> STRING .)
+    GROUP           reduce using rule 48 (literal -> STRING .)
+    HAVING          reduce using rule 48 (literal -> STRING .)
+    ORDER           reduce using rule 48 (literal -> STRING .)
+    LIMIT           reduce using rule 48 (literal -> STRING .)
+    SEMICOLON       reduce using rule 48 (literal -> STRING .)
+    COMMA           reduce using rule 48 (literal -> STRING .)
+    WHERE           reduce using rule 48 (literal -> STRING .)
+    RPAREN          reduce using rule 48 (literal -> STRING .)
 
-    literal_list                   shift and go to state 105
-    literal                        shift and go to state 106
 
 state 93
 
-    (27) aggregate_expr -> COUNT LPAREN STAR . RPAREN
+    (36) comparison -> aggregate_expr operator literal .
 
-    RPAREN          shift and go to state 107
+    AND             reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    OR              reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    GROUP           reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    HAVING          reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    ORDER           reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    LIMIT           reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    SEMICOLON       reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    COMMA           reduce using rule 36 (comparison -> aggregate_expr operator literal .)
+    WHERE           reduce using rule 36 (comparison -> aggregate_expr operator literal .)
 
 
 state 94
 
-    (28) aggregate_expr -> COUNT LPAREN IDENTIFIER . RPAREN
+    (37) comparison -> IDENTIFIER BETWEEN literal . AND literal
 
-    RPAREN          shift and go to state 108
+    AND             shift and go to state 108
 
 
 state 95
 
-    (29) aggregate_expr -> MIN LPAREN IDENTIFIER . RPAREN
+    (40) comparison -> IDENTIFIER IN LPAREN . literal_list RPAREN
+    (38) literal_list -> . literal
+    (39) literal_list -> . literal_list COMMA literal
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    RPAREN          shift and go to state 109
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    literal_list                   shift and go to state 109
+    literal                        shift and go to state 110
 
 state 96
 
-    (30) aggregate_expr -> MAX LPAREN IDENTIFIER . RPAREN
-
-    RPAREN          shift and go to state 110
-
-
-state 97
-
-    (31) aggregate_expr -> AVG LPAREN IDENTIFIER . RPAREN
+    (28) aggregate_expr -> COUNT LPAREN STAR . RPAREN
 
     RPAREN          shift and go to state 111
 
 
-state 98
+state 97
 
-    (32) aggregate_expr -> SUM LPAREN IDENTIFIER . RPAREN
+    (29) aggregate_expr -> COUNT LPAREN IDENTIFIER . RPAREN
 
     RPAREN          shift and go to state 112
 
 
+state 98
+
+    (30) aggregate_expr -> MIN LPAREN IDENTIFIER . RPAREN
+
+    RPAREN          shift and go to state 113
+
+
 state 99
 
-    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt . SEMICOLON
+    (31) aggregate_expr -> MAX LPAREN IDENTIFIER . RPAREN
 
-    SEMICOLON       shift and go to state 113
+    RPAREN          shift and go to state 114
 
 
 state 100
 
-    (55) limit_clause_opt -> LIMIT . NUMBER
+    (32) aggregate_expr -> AVG LPAREN IDENTIFIER . RPAREN
 
-    NUMBER          shift and go to state 114
+    RPAREN          shift and go to state 115
 
 
 state 101
 
-    (56) limit_clause_opt -> empty .
+    (33) aggregate_expr -> SUM LPAREN IDENTIFIER . RPAREN
 
-    SEMICOLON       reduce using rule 56 (limit_clause_opt -> empty .)
+    RPAREN          shift and go to state 116
 
 
 state 102
 
-    (48) order_by_clause_opt -> ORDER BY . order_list
-    (50) order_list -> . order_item
-    (51) order_list -> . order_list COMMA order_item
-    (52) order_item -> . IDENTIFIER
-    (53) order_item -> . IDENTIFIER ASC
-    (54) order_item -> . IDENTIFIER DESC
+    (5) table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .
+    (24) condition -> condition . AND term
+    (25) condition -> condition . OR term
 
-    IDENTIFIER      shift and go to state 117
+    COMMA           reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    WHERE           reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    GROUP           reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    HAVING          reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    ORDER           reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    LIMIT           reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    SEMICOLON       reduce using rule 5 (table_list -> IDENTIFIER JOIN IDENTIFIER ON condition .)
+    AND             shift and go to state 63
+    OR              shift and go to state 64
 
-    order_list                     shift and go to state 115
-    order_item                     shift and go to state 116
 
 state 103
 
-    (20) group_list -> group_list COMMA . IDENTIFIER
+    (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt . SEMICOLON
 
-    IDENTIFIER      shift and go to state 118
+    SEMICOLON       shift and go to state 117
 
 
 state 104
 
-    (36) comparison -> IDENTIFIER BETWEEN literal AND . literal
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (56) limit_clause_opt -> LIMIT . NUMBER
 
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    NUMBER          shift and go to state 118
 
-    literal                        shift and go to state 119
 
 state 105
 
-    (39) comparison -> IDENTIFIER IN LPAREN literal_list . RPAREN
-    (38) literal_list -> literal_list . COMMA literal
+    (57) limit_clause_opt -> empty .
 
-    RPAREN          shift and go to state 120
-    COMMA           shift and go to state 121
+    SEMICOLON       reduce using rule 57 (limit_clause_opt -> empty .)
 
 
 state 106
 
-    (37) literal_list -> literal .
+    (49) order_by_clause_opt -> ORDER BY . order_list
+    (51) order_list -> . order_item
+    (52) order_list -> . order_list COMMA order_item
+    (53) order_item -> . IDENTIFIER
+    (54) order_item -> . IDENTIFIER ASC
+    (55) order_item -> . IDENTIFIER DESC
 
-    RPAREN          reduce using rule 37 (literal_list -> literal .)
-    COMMA           reduce using rule 37 (literal_list -> literal .)
+    IDENTIFIER      shift and go to state 121
 
+    order_list                     shift and go to state 119
+    order_item                     shift and go to state 120
 
 state 107
 
-    (27) aggregate_expr -> COUNT LPAREN STAR RPAREN .
+    (21) group_list -> group_list COMMA . IDENTIFIER
 
-    EQ              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
-    NE              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
-    GT              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
-    LT              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
-    GE              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
-    LE              reduce using rule 27 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    IDENTIFIER      shift and go to state 122
 
 
 state 108
 
-    (28) aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .
+    (37) comparison -> IDENTIFIER BETWEEN literal AND . literal
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    EQ              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
-    NE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
-    GT              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
-    LT              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
-    GE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
-    LE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    literal                        shift and go to state 123
 
 state 109
 
-    (29) aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .
+    (40) comparison -> IDENTIFIER IN LPAREN literal_list . RPAREN
+    (39) literal_list -> literal_list . COMMA literal
 
-    EQ              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
-    NE              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
-    GT              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
-    LT              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
-    GE              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
-    LE              reduce using rule 29 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    RPAREN          shift and go to state 124
+    COMMA           shift and go to state 125
 
 
 state 110
 
-    (30) aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .
+    (38) literal_list -> literal .
 
-    EQ              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
-    NE              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
-    GT              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
-    LT              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
-    GE              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
-    LE              reduce using rule 30 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    RPAREN          reduce using rule 38 (literal_list -> literal .)
+    COMMA           reduce using rule 38 (literal_list -> literal .)
 
 
 state 111
 
-    (31) aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .
+    (28) aggregate_expr -> COUNT LPAREN STAR RPAREN .
 
-    EQ              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
-    NE              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
-    GT              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
-    LT              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
-    GE              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
-    LE              reduce using rule 31 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    EQ              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    NE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    GT              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    LT              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    GE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
+    LE              reduce using rule 28 (aggregate_expr -> COUNT LPAREN STAR RPAREN .)
 
 
 state 112
 
-    (32) aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .
+    (29) aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .
 
-    EQ              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
-    NE              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
-    GT              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
-    LT              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
-    GE              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
-    LE              reduce using rule 32 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    EQ              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    NE              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    GT              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    LT              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    GE              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
+    LE              reduce using rule 29 (aggregate_expr -> COUNT LPAREN IDENTIFIER RPAREN .)
 
 
 state 113
+
+    (30) aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .
+
+    EQ              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    NE              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    GT              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    LT              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    GE              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+    LE              reduce using rule 30 (aggregate_expr -> MIN LPAREN IDENTIFIER RPAREN .)
+
+
+state 114
+
+    (31) aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .
+
+    EQ              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    NE              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    GT              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    LT              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    GE              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+    LE              reduce using rule 31 (aggregate_expr -> MAX LPAREN IDENTIFIER RPAREN .)
+
+
+state 115
+
+    (32) aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .
+
+    EQ              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    NE              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    GT              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    LT              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    GE              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+    LE              reduce using rule 32 (aggregate_expr -> AVG LPAREN IDENTIFIER RPAREN .)
+
+
+state 116
+
+    (33) aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .
+
+    EQ              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    NE              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    GT              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    LT              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    GE              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+    LE              reduce using rule 33 (aggregate_expr -> SUM LPAREN IDENTIFIER RPAREN .)
+
+
+state 117
 
     (1) query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON .
 
     $end            reduce using rule 1 (query -> SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON .)
 
 
-state 114
-
-    (55) limit_clause_opt -> LIMIT NUMBER .
-
-    SEMICOLON       reduce using rule 55 (limit_clause_opt -> LIMIT NUMBER .)
-
-
-state 115
-
-    (48) order_by_clause_opt -> ORDER BY order_list .
-    (51) order_list -> order_list . COMMA order_item
-
-    LIMIT           reduce using rule 48 (order_by_clause_opt -> ORDER BY order_list .)
-    SEMICOLON       reduce using rule 48 (order_by_clause_opt -> ORDER BY order_list .)
-    COMMA           shift and go to state 122
-
-
-state 116
-
-    (50) order_list -> order_item .
-
-    COMMA           reduce using rule 50 (order_list -> order_item .)
-    LIMIT           reduce using rule 50 (order_list -> order_item .)
-    SEMICOLON       reduce using rule 50 (order_list -> order_item .)
-
-
-state 117
-
-    (52) order_item -> IDENTIFIER .
-    (53) order_item -> IDENTIFIER . ASC
-    (54) order_item -> IDENTIFIER . DESC
-
-    COMMA           reduce using rule 52 (order_item -> IDENTIFIER .)
-    LIMIT           reduce using rule 52 (order_item -> IDENTIFIER .)
-    SEMICOLON       reduce using rule 52 (order_item -> IDENTIFIER .)
-    ASC             shift and go to state 123
-    DESC            shift and go to state 124
-
-
 state 118
 
-    (20) group_list -> group_list COMMA IDENTIFIER .
+    (56) limit_clause_opt -> LIMIT NUMBER .
 
-    COMMA           reduce using rule 20 (group_list -> group_list COMMA IDENTIFIER .)
-    HAVING          reduce using rule 20 (group_list -> group_list COMMA IDENTIFIER .)
-    ORDER           reduce using rule 20 (group_list -> group_list COMMA IDENTIFIER .)
-    LIMIT           reduce using rule 20 (group_list -> group_list COMMA IDENTIFIER .)
-    SEMICOLON       reduce using rule 20 (group_list -> group_list COMMA IDENTIFIER .)
+    SEMICOLON       reduce using rule 56 (limit_clause_opt -> LIMIT NUMBER .)
 
 
 state 119
 
-    (36) comparison -> IDENTIFIER BETWEEN literal AND literal .
+    (49) order_by_clause_opt -> ORDER BY order_list .
+    (52) order_list -> order_list . COMMA order_item
 
-    AND             reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    OR              reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    GROUP           reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    HAVING          reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    ORDER           reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    LIMIT           reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
-    SEMICOLON       reduce using rule 36 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    LIMIT           reduce using rule 49 (order_by_clause_opt -> ORDER BY order_list .)
+    SEMICOLON       reduce using rule 49 (order_by_clause_opt -> ORDER BY order_list .)
+    COMMA           shift and go to state 126
 
 
 state 120
 
-    (39) comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .
+    (51) order_list -> order_item .
 
-    AND             reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    OR              reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    GROUP           reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    HAVING          reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    ORDER           reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    LIMIT           reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
-    SEMICOLON       reduce using rule 39 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    COMMA           reduce using rule 51 (order_list -> order_item .)
+    LIMIT           reduce using rule 51 (order_list -> order_item .)
+    SEMICOLON       reduce using rule 51 (order_list -> order_item .)
 
 
 state 121
 
-    (38) literal_list -> literal_list COMMA . literal
-    (46) literal -> . NUMBER
-    (47) literal -> . STRING
+    (53) order_item -> IDENTIFIER .
+    (54) order_item -> IDENTIFIER . ASC
+    (55) order_item -> IDENTIFIER . DESC
 
-    NUMBER          shift and go to state 88
-    STRING          shift and go to state 89
+    COMMA           reduce using rule 53 (order_item -> IDENTIFIER .)
+    LIMIT           reduce using rule 53 (order_item -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 53 (order_item -> IDENTIFIER .)
+    ASC             shift and go to state 127
+    DESC            shift and go to state 128
 
-    literal                        shift and go to state 125
 
 state 122
 
-    (51) order_list -> order_list COMMA . order_item
-    (52) order_item -> . IDENTIFIER
-    (53) order_item -> . IDENTIFIER ASC
-    (54) order_item -> . IDENTIFIER DESC
+    (21) group_list -> group_list COMMA IDENTIFIER .
 
-    IDENTIFIER      shift and go to state 117
+    COMMA           reduce using rule 21 (group_list -> group_list COMMA IDENTIFIER .)
+    HAVING          reduce using rule 21 (group_list -> group_list COMMA IDENTIFIER .)
+    ORDER           reduce using rule 21 (group_list -> group_list COMMA IDENTIFIER .)
+    LIMIT           reduce using rule 21 (group_list -> group_list COMMA IDENTIFIER .)
+    SEMICOLON       reduce using rule 21 (group_list -> group_list COMMA IDENTIFIER .)
 
-    order_item                     shift and go to state 126
 
 state 123
 
-    (53) order_item -> IDENTIFIER ASC .
+    (37) comparison -> IDENTIFIER BETWEEN literal AND literal .
 
-    COMMA           reduce using rule 53 (order_item -> IDENTIFIER ASC .)
-    LIMIT           reduce using rule 53 (order_item -> IDENTIFIER ASC .)
-    SEMICOLON       reduce using rule 53 (order_item -> IDENTIFIER ASC .)
+    AND             reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    OR              reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    GROUP           reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    HAVING          reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    ORDER           reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    LIMIT           reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    SEMICOLON       reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    COMMA           reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
+    WHERE           reduce using rule 37 (comparison -> IDENTIFIER BETWEEN literal AND literal .)
 
 
 state 124
 
-    (54) order_item -> IDENTIFIER DESC .
+    (40) comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .
 
-    COMMA           reduce using rule 54 (order_item -> IDENTIFIER DESC .)
-    LIMIT           reduce using rule 54 (order_item -> IDENTIFIER DESC .)
-    SEMICOLON       reduce using rule 54 (order_item -> IDENTIFIER DESC .)
+    AND             reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    OR              reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    GROUP           reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    HAVING          reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    ORDER           reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    LIMIT           reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    SEMICOLON       reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    COMMA           reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
+    WHERE           reduce using rule 40 (comparison -> IDENTIFIER IN LPAREN literal_list RPAREN .)
 
 
 state 125
 
-    (38) literal_list -> literal_list COMMA literal .
+    (39) literal_list -> literal_list COMMA . literal
+    (47) literal -> . NUMBER
+    (48) literal -> . STRING
 
-    RPAREN          reduce using rule 38 (literal_list -> literal_list COMMA literal .)
-    COMMA           reduce using rule 38 (literal_list -> literal_list COMMA literal .)
+    NUMBER          shift and go to state 91
+    STRING          shift and go to state 92
 
+    literal                        shift and go to state 129
 
 state 126
 
-    (51) order_list -> order_list COMMA order_item .
+    (52) order_list -> order_list COMMA . order_item
+    (53) order_item -> . IDENTIFIER
+    (54) order_item -> . IDENTIFIER ASC
+    (55) order_item -> . IDENTIFIER DESC
 
-    COMMA           reduce using rule 51 (order_list -> order_list COMMA order_item .)
-    LIMIT           reduce using rule 51 (order_list -> order_list COMMA order_item .)
-    SEMICOLON       reduce using rule 51 (order_list -> order_list COMMA order_item .)
+    IDENTIFIER      shift and go to state 121
+
+    order_item                     shift and go to state 130
+
+state 127
+
+    (54) order_item -> IDENTIFIER ASC .
+
+    COMMA           reduce using rule 54 (order_item -> IDENTIFIER ASC .)
+    LIMIT           reduce using rule 54 (order_item -> IDENTIFIER ASC .)
+    SEMICOLON       reduce using rule 54 (order_item -> IDENTIFIER ASC .)
+
+
+state 128
+
+    (55) order_item -> IDENTIFIER DESC .
+
+    COMMA           reduce using rule 55 (order_item -> IDENTIFIER DESC .)
+    LIMIT           reduce using rule 55 (order_item -> IDENTIFIER DESC .)
+    SEMICOLON       reduce using rule 55 (order_item -> IDENTIFIER DESC .)
+
+
+state 129
+
+    (39) literal_list -> literal_list COMMA literal .
+
+    RPAREN          reduce using rule 39 (literal_list -> literal_list COMMA literal .)
+    COMMA           reduce using rule 39 (literal_list -> literal_list COMMA literal .)
+
+
+state 130
+
+    (52) order_list -> order_list COMMA order_item .
+
+    COMMA           reduce using rule 52 (order_list -> order_list COMMA order_item .)
+    LIMIT           reduce using rule 52 (order_list -> order_list COMMA order_item .)
+    SEMICOLON       reduce using rule 52 (order_list -> order_list COMMA order_item .)
 

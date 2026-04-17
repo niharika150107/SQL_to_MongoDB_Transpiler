@@ -17,17 +17,54 @@ class SqlParser:
 
     def p_query(self, p):
         '''query : SELECT select_list FROM table_list where_clause_opt group_by_clause_opt having_clause_opt order_by_clause_opt limit_clause_opt SEMICOLON'''
-        p[0] = SelectQuery(columns=p[2], table=p[4][0] if len(p[4])==1 else p[4], where=p[5],group_by=p[6],having=p[7],order_by=p[8],limit=p[9])
-
+        table_data = p[4]
+        if isinstance(table_data, dict):
+            base_table = table_data["base"]
+            joins = table_data["joins"]
+        else:
+            base_table = table_data[0] if isinstance(table_data, list) and len(table_data) == 1 else table_data
+            joins = []
+        p[0] = SelectQuery(
+            columns=p[2],
+            table=base_table,
+            joins=joins,   
+            where=p[5],
+            group_by=p[6],
+            having=p[7],
+            order_by=p[8],
+            limit=p[9]
+        )
     def p_select_list_star(self, p):
         '''select_list : STAR'''
         p[0] = ['*']
     def p_table_list_single(self, p):
         '''table_list : IDENTIFIER'''
-        p[0] = [p[1]]
-    def p_table_list_multi(self, p):
+        p[0] = {
+            "base": p[1],
+            "joins": []
+        }
+    def p_table_list_comma(self, p):
         '''table_list : table_list COMMA IDENTIFIER'''
-        p[0] = p[1] + [p[3]]
+        # keep old behavior for implicit joins
+        if isinstance(p[1], dict):
+            tables = [p[1]["base"]] + [j["table"] for j in p[1]["joins"]]
+        else:
+            tables = p[1]
+        tables.append(p[3])
+        p[0] = tables   # keep implicit join untouched
+    def p_table_list_join(self, p):
+        '''
+        table_list : IDENTIFIER JOIN IDENTIFIER ON condition
+        '''
+        p[0] = {
+            "base": p[1],
+            "joins": [
+                {
+                    "table": p[3],
+                    "condition": p[5]
+                }
+            ]
+        }
     def p_select_list_columns(self, p):
         '''select_list : column_list'''
         p[0] = p[1]

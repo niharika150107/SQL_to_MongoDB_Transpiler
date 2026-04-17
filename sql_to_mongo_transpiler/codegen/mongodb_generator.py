@@ -81,6 +81,9 @@ class MongoDBGenerator:
             }
     def generate(self, ast):
         if isinstance(ast,SelectQuery):
+            self.current_base_table = ast.table
+            if hasattr(ast, "joins") and ast.joins:
+                return self._generate_explicit_join(ast)
             if isinstance(ast.table, list) and len(ast.table) > 1:
                 return self._generate_join(ast)
             # Aggregation
@@ -90,6 +93,62 @@ class MongoDBGenerator:
             return self._generate_find(ast)
         else:
             raise ValueError(f"Unsupported AST node: {type(ast)}")
+    def _generate_explicit_join(self, node):
+        base_table = node.table
+        join = node.joins[0]   # minimal support: single JOIN
+        join_table = join["table"]
+        condition = join["condition"]
+        left = condition.identifier
+        right = condition.value
+        # Determine mapping
+        if left["table"] == base_table:
+            localField = left["column"]
+            foreignField = right["column"]
+        else:
+            localField = right["column"]
+            foreignField = left["column"]
+        pipeline = []
+        # $lookup
+        pipeline.append({
+            "$lookup": {
+                "from": join_table,
+                "localField": localField,
+                "foreignField": foreignField,
+                "as": join_table
+            }
+        })
+        # $unwind
+        pipeline.append({
+            "$unwind": f"${join_table}"
+        })
+        # WHERE support (important)
+        if node.where:
+            match = self._generate_filter(node.where)
+            pipeline.append({"$match": match})
+        #  projection (reuse your logic)
+        projection = {}
+        for col in node.columns:
+            if isinstance(col, dict):
+                table = col.get("table")
+                field = col.get("column")
+            elif isinstance(col, str):
+                if "." in col:
+                    table, field = col.split(".")
+                else:
+                    table = base_table
+                    field = col
+            else:
+                continue
+            if table == join_table:
+                projection[f"{join_table}.{field}"] = 1
+            else:
+                projection[field] = 1
+        pipeline.append({"$project": projection})
+        return {
+            "string": f"db.{base_table}.aggregate({pipeline})",
+            "collection": base_table,
+            "pipeline": pipeline
+            }
     def _split_conditions(self, node):
         if isinstance(node, Comparison):
             if isinstance(node.value, dict):
@@ -341,7 +400,10 @@ class MongoDBGenerator:
         else:
             if isinstance(identifier, dict):
                 if identifier["table"]:
-                    field = f"{identifier['table']}.{identifier['column']}"
+                    if hasattr(self, "current_base_table") and identifier["table"] == self.current_base_table:
+                        field = identifier["column"]
+                    else:
+                            field = f"{identifier['table']}.{identifier['column']}"
                 else:
                     field = identifier["column"]
             else:

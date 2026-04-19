@@ -8,7 +8,9 @@ import json
 import os
 
 app = Flask(__name__)
-
+# ---------------- INIT (RUNS ONLY ONCE) ---------------- #
+parser = get_parser()
+generator = MongoDBGenerator()
 # ---------------- DB CONNECTIONS ---------------- #
 
 # MongoDB
@@ -73,16 +75,19 @@ def run_query():
         print("SQL:", sql)
 
         # ---------------- Transpiler ---------------- #
-        parser = get_parser()
+        #parser = get_parser()
         analyzer = SemanticAnalyzer(schema)
-        generator = MongoDBGenerator()
+        #generator = MongoDBGenerator()
 
         ast = parser.parse(sql)
         analyzer.validate_query(ast)
 
         mongo_data = generator.generate(ast)
         print("mongo_data:", mongo_data)
-        collection = mongo_data["collection"]
+        #collection = mongo_data["collection"]
+        collection = mongo_data.get("collection")
+        if not collection:
+            return jsonify({"error": "No collection generated"}), 400
 
         # ---------------- SQL execution ---------------- #
         try:
@@ -112,7 +117,7 @@ def run_query():
         sql_result_serializable = [list(row) for row in sql_rows]
 
         return jsonify({
-            "mongo": mongo_data["string"],
+            "mongo": mongo_data.get("string", str(mongo_data)),
             "columns": sql_columns,
             "sql_result": sql_result_serializable,
             "mongo_result": mongo_result

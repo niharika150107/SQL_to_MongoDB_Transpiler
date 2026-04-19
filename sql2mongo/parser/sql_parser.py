@@ -7,7 +7,12 @@ class SqlParser:
         self.lexer = SqlLexer()
         self.lexer.build()
         self.tokens = self.lexer.tokens
-        self.parser = yacc.yacc(module=self)
+        self.parser = yacc.yacc(
+            module=self,
+            outputdir='/tmp',
+            debug=False,
+            write_tables=True
+        )
 
     # Precedence rules
     precedence = (
@@ -299,8 +304,4 @@ class SqlParser:
 
 # Helper function
 def get_parser():
-    return yacc.yacc(
-        outputdir='/tmp',
-        debug=False,
-        write_tables=True
-    )
+    return SqlParser()

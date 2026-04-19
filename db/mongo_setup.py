@@ -25,8 +25,4 @@ orders_data = [
 db.users.insert_many(users_data)
 db.orders.insert_many(orders_data)
 
-<<<<<<< HEAD
 print("MongoDB collections created and seeded ✅")
-=======
-print("MongoDB collections created and seeded ✅")
->>>>>>> f58b024 (Built sql2mongo as a command in terminal)

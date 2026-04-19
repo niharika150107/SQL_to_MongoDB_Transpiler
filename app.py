@@ -19,7 +19,7 @@ if not mongo_uri:
 mongo_client = MongoClient(mongo_uri)
 mongo_db = mongo_client["transpiler_db"]
 
-# PostgreSQL connection function
+# PostgreSQL
 def get_pg_connection():
     return psycopg2.connect(
         dbname=os.getenv("PG_DB"),
@@ -28,7 +28,6 @@ def get_pg_connection():
         host=os.getenv("PG_HOST"),
         port=os.getenv("PG_PORT")
     )
-
 
 def run_sql(query):
     conn = get_pg_connection()
@@ -39,10 +38,8 @@ def run_sql(query):
     conn.close()
     return rows, columns
 
-
 def run_mongo(collection, query, projection=None):
     return list(mongo_db[collection].find(query, projection))
-
 
 # ---------------- ROUTES ---------------- #
 
@@ -50,24 +47,32 @@ def run_mongo(collection, query, projection=None):
 def index():
     return render_template("index.html")
 
-
 @app.route("/schema")
 def get_schema():
     try:
         with open("schema.json") as f:
             return jsonify(json.load(f))
-    except FileNotFoundError:
-        return jsonify({"error": "schema.json not found"}), 500
-
+    except Exception as e:
+        return jsonify({"error": f"Schema error: {str(e)}"}), 500
 
 @app.route("/run", methods=["POST"])
 def run_query():
-    data = request.json
-
-    sql = data["sql"]
-    schema = data["schema"]
-
     try:
+        # ✅ Safe JSON parsing
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"error": "No JSON received"}), 400
+
+        sql = data.get("sql")
+        schema = data.get("schema")
+
+        if not sql or not schema:
+            return jsonify({"error": "Missing sql or schema"}), 400
+
+        print("SQL:", sql)
+
+        # ---------------- Transpiler ---------------- #
         parser = get_parser()
         analyzer = SemanticAnalyzer(schema)
         generator = MongoDBGenerator()
@@ -78,21 +83,28 @@ def run_query():
         mongo_data = generator.generate(ast)
         collection = mongo_data["collection"]
 
-        # SQL execution
-        sql_rows, sql_columns = run_sql(sql)
+        # ---------------- SQL execution ---------------- #
+        try:
+            sql_rows, sql_columns = run_sql(sql)
+        except Exception as e:
+            return jsonify({"error": f"Postgres error: {str(e)}"})
 
-        # Mongo execution
-        if "filter" in mongo_data:
-            mongo_result = run_mongo(
-                collection,
-                mongo_data["filter"],
-                mongo_data.get("projection")
-            )
-        else:
-            mongo_result = list(
-                mongo_db[collection].aggregate(mongo_data["pipeline"])
-            )
+        # ---------------- Mongo execution ---------------- #
+        try:
+            if "filter" in mongo_data:
+                mongo_result = run_mongo(
+                    collection,
+                    mongo_data["filter"],
+                    mongo_data.get("projection")
+                )
+            else:
+                mongo_result = list(
+                    mongo_db[collection].aggregate(mongo_data["pipeline"])
+                )
+        except Exception as e:
+            return jsonify({"error": f"Mongo error: {str(e)}"})
 
+        # Clean Mongo output
         for doc in mongo_result:
             doc.pop("_id", None)
 
@@ -106,7 +118,7 @@ def run_query():
         })
 
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

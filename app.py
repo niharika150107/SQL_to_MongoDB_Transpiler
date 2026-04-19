@@ -81,6 +81,7 @@ def run_query():
         analyzer.validate_query(ast)
 
         mongo_data = generator.generate(ast)
+        print("mongo_data:", mongo_data)
         collection = mongo_data["collection"]
 
         # ---------------- SQL execution ---------------- #

@@ -5,31 +5,36 @@ from sql2mongo.semantic.semantic_analyzer import SemanticAnalyzer
 from pymongo import MongoClient
 import psycopg2
 import json
+import os
 
 app = Flask(__name__)
 
 # ---------------- DB CONNECTIONS ---------------- #
 
-#mongo_client = MongoClient("mongodb://localhost:27017/")
-#mongo_db = mongo_client["transpiler_db"]
-import os
+# MongoDB
+mongo_uri = os.getenv("MONGO_URI")
+if not mongo_uri:
+    raise Exception("MONGO_URI not set")
 
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
+mongo_client = MongoClient(mongo_uri)
 mongo_db = mongo_client["transpiler_db"]
 
-
-def run_sql(query):
-    conn = psycopg2.connect(
+# PostgreSQL connection function
+def get_pg_connection():
+    return psycopg2.connect(
         dbname=os.getenv("PG_DB"),
         user=os.getenv("PG_USER"),
         password=os.getenv("PG_PASSWORD"),
         host=os.getenv("PG_HOST"),
         port=os.getenv("PG_PORT")
     )
+
+
+def run_sql(query):
+    conn = get_pg_connection()
     cur = conn.cursor()
     cur.execute(query)
     rows = cur.fetchall()
-    # Return column names alongside rows
     columns = [desc[0] for desc in cur.description] if cur.description else []
     conn.close()
     return rows, columns
@@ -48,61 +53,11 @@ def index():
 
 @app.route("/schema")
 def get_schema():
-    """
-    Serve schema from schema.json.
-    Falls back to introspecting PostgreSQL if schema.json not found.
-    """
     try:
         with open("schema.json") as f:
             return jsonify(json.load(f))
     except FileNotFoundError:
-        # Auto-introspect from PostgreSQL
-        try:
-            conn = psycopg2.connect(
-                dbname="transpiler_db",
-                user="postgres",
-                password="password",
-                host="localhost",
-                port="5432"
-            )
-            cur = conn.cursor()
-            cur.execute("""
-                SELECT table_name, column_name, data_type,
-                       CASE WHEN column_name IN (
-                           SELECT kcu.column_name
-                           FROM information_schema.table_constraints tc
-                           JOIN information_schema.key_column_usage kcu
-                             ON tc.constraint_name = kcu.constraint_name
-                           WHERE tc.constraint_type = 'PRIMARY KEY'
-                             AND tc.table_name = c.table_name
-                       ) THEN true ELSE false END AS is_pk
-                FROM information_schema.columns c
-                WHERE table_schema = 'public'
-                ORDER BY table_name, ordinal_position;
-            """)
-            rows = cur.fetchall()
-            conn.close()
-
-            tables = {}
-            for table_name, col_name, data_type, is_pk in rows:
-                if table_name not in tables:
-                    tables[table_name] = []
-                tables[table_name].append({
-                    "name": col_name,
-                    "type": data_type,
-                    "primary_key": is_pk
-                })
-
-            schema = {
-                "tables": [
-                    {"name": t, "columns": cols}
-                    for t, cols in tables.items()
-                ]
-            }
-            return jsonify(schema)
-
-        except Exception as e:
-            return jsonify({"error": f"Could not load schema: {str(e)}"}), 500
+        return jsonify({"error": "schema.json not found"}), 500
 
 
 @app.route("/run", methods=["POST"])
@@ -121,10 +76,9 @@ def run_query():
         analyzer.validate_query(ast)
 
         mongo_data = generator.generate(ast)
-
         collection = mongo_data["collection"]
 
-        # SQL execution — now returns (rows, columns)
+        # SQL execution
         sql_rows, sql_columns = run_sql(sql)
 
         # Mongo execution
@@ -139,16 +93,14 @@ def run_query():
                 mongo_db[collection].aggregate(mongo_data["pipeline"])
             )
 
-        # Remove _id from mongo results
         for doc in mongo_result:
             doc.pop("_id", None)
 
-        # Convert SQL rows to JSON-serializable format
         sql_result_serializable = [list(row) for row in sql_rows]
 
         return jsonify({
             "mongo": mongo_data["string"],
-            "columns": sql_columns,           # ← new: column names for table headers
+            "columns": sql_columns,
             "sql_result": sql_result_serializable,
             "mongo_result": mongo_result
         })
@@ -158,4 +110,5 @@ def run_query():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

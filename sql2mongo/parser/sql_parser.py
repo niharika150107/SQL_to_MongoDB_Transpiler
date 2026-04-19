@@ -299,4 +299,9 @@ class SqlParser:
 
 # Helper function
 def get_parser():
-    return SqlParser()
+    import ply.yacc as yacc
+    return yacc.yacc(
+        outputdir='/tmp',
+        debug=False,
+        write_tables=True
+    )
